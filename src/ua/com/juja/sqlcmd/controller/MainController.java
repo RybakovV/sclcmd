@@ -6,14 +6,31 @@ import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.Console;
 import ua.com.juja.sqlcmd.viuw.View;
 
-/**
- * Created by MEBELBOS-2 on 02.09.2016.
- */
+
 public class MainController {
+
+
+    private View view;
+    private DatabaseManager manager;
+
+    MainController(View view, DatabaseManager manager){
+        this.view = view;
+        this.manager = manager;
+    }
+
     public static void main(String[] args) {
         View view = new Console();
         DatabaseManager manager = new PostgresqlDatabaseManager();
+    }
 
+
+    void run(){
+        connectToDb();
+
+
+    }
+
+    private void connectToDb() {
         view.write("Hello");
         while (true){
             view.write("Enter Database name: ");
@@ -34,6 +51,10 @@ public class MainController {
                     manager = new MysqlDatabaseManager();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
+                if (manager.getVersionDatabase().equals(("PostgreSQL"))){
+                    manager = new PostgresqlDatabaseManager();
+                    manager.connectToDataBase(databaseName, userName, userPassword);
+                }
                 break;
             }catch (Exception e){
                 String message = e.getMessage();
@@ -45,9 +66,6 @@ public class MainController {
             }
         }
         view.write("You connected to " + manager.getVersionDatabase() + " database" );
-
-
-
     }
 
 }

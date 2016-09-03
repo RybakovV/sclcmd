@@ -1,13 +1,9 @@
 package ua.com.juja.sqlcmd.model;
 
-import org.postgresql.util.PSQLException;
-
 import java.sql.*;
 import java.util.Arrays;
 
-/**
- * Created by MEBELBOS-2 on 09.08.2016.
- */
+
 public class PostgresqlDatabaseManager implements DatabaseManager {
 
     private Connection connection;
@@ -17,7 +13,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
     @Override
     public String getTableString(String tableName) {
-        int maxColumnSize = 0;
+        int maxColumnSize;
             maxColumnSize = getMaxColumnSize(tableName);
         if (maxColumnSize==0){
             return getEmptyTable(tableName);
@@ -28,7 +24,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
     @Override
     public String getStringTableData(String tableName) {
-        int rowsCount = 0;
+        int rowsCount;
         rowsCount = getCountRows(tableName);
         int maxColumnSize = getMaxColumnSize(tableName);
         String result = "" ;
@@ -37,9 +33,8 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         }else{
             maxColumnSize+=3;
         }
-        Statement statement = null;
-        ResultSet resultSet = null;
-        ResultSetMetaData resultSetMetaData = null;
+        Statement statement;
+        ResultSet resultSet;
 
         try {
             int columnCount = getColumnCount(tableName);
@@ -76,7 +71,6 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
                             result += "═";
                         }
                         result += "╬";
-
                     }
                     for (int i = 0; i < maxColumnSize; i++) {
                         result += "═";
@@ -112,20 +106,16 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             return getEmptyTable(tableName);
         }
         String result = "";
-        Statement statement = null;
-        ResultSet resultSet = null;
-        ResultSetMetaData resultSetMetaData = null;
-        int columnCount = 0;
-
-
+        Statement statement;
+        ResultSet resultSet;
+        int columnCount;
         try {
             if (maxColumnSize % 2 == 0) {
                 maxColumnSize += 2;
             } else {
                 maxColumnSize += 3;
             }
-            columnCount = getColumnCount(tableName);//resultSetMetaData.getColumnCount();
-            //first string of the header
+            columnCount = getColumnCount(tableName);
             result += "╔";
             for (int j = 1; j < columnCount; j++) {
                 for (int i = 0; i < maxColumnSize; i++) {
@@ -203,32 +193,27 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
         int tableSize = getCountRows(tableName);
         DataSet[] result = new DataSet[tableSize];
-        Statement statement = null;
-        ResultSet resultSet = null;
+        Statement statement;
+        ResultSet resultSet;
         try {
             statement = connection.createStatement();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
-            ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-            int index = 0;
-            int columnCount = getColumnCount(tableName);
-            while (resultSet.next()){
-                DataSet dataSet = new DataSet();
-                for (int i = 1; i <= columnCount; i++) {
-                    dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+            if (statement != null) {
+                resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
+                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                int index = 0;
+                int columnCount = getColumnCount(tableName);
+                while (resultSet.next()){
+                    DataSet dataSet = new DataSet();
+                    for (int i = 1; i <= columnCount; i++) {
+                        dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+                    }
+                    result[index] = dataSet;
+                    index++;
                 }
-                result[index] = dataSet;
-                index++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-
         return result;
     }
 
@@ -259,34 +244,35 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             e.printStackTrace();
         }
         try {
-            resultSet = statement.executeQuery(
-                    "SELECT * FROM information_schema.columns " +
-                            "WHERE table_schema = 'public' " +
-                            "AND table_name = '" + tableName + "'");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        try {
-            if (resultSet.next()) {
-                int maxLength = resultSet.getString("column_name").length();
-                while (resultSet.next()) {
-                    if (maxLength < resultSet.getString("column_name").length()) {
-                        maxLength = resultSet.getString("column_name").length();
-                    }
-                }
-                resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
-                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                int columnCount = resultSetMetaData.getColumnCount();
-                while (resultSet.next()) {
-                    for (int i = 1; i <= columnCount; i++) {
-                        if (maxLength < resultSet.getString(i).length()) {
-                            maxLength = resultSet.getString(i).length();
+            if (statement != null) {
+                resultSet = statement.executeQuery(
+                        "SELECT * FROM information_schema.columns " +
+                                "WHERE table_schema = 'public' " +
+                                "AND table_name = '" + tableName + "'");
+            }
+
+            if (resultSet != null){
+                if (resultSet.next()) {
+                    int maxLength = resultSet.getString("column_name").length();
+                    while (resultSet.next()) {
+                        if (maxLength < resultSet.getString("column_name").length()) {
+                            maxLength = resultSet.getString("column_name").length();
                         }
                     }
+                    resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
+                    ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                    int columnCount = resultSetMetaData.getColumnCount();
+                    while (resultSet.next()) {
+                        for (int i = 1; i <= columnCount; i++) {
+                            if (maxLength < resultSet.getString(i).length()) {
+                                maxLength = resultSet.getString(i).length();
+                            }
+                        }
+                    }
+                    resultSet.close();
+                    statement.close();
+                    return maxLength;
                 }
-                resultSet.close();
-                statement.close();
-                return maxLength;
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -296,9 +282,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
 
     private int getCountRows(String tableName) {
-        Statement statement = null;
+        Statement statement;
         int countRows = 0;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             statement = connection.createStatement();
             resultSet = statement.executeQuery("SELECT COUNT(*) FROM public." + tableName);
@@ -326,15 +312,17 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             e.printStackTrace();
             System.out.println("Can't connect to Database");
         }
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
-            resultSet = statement.executeQuery(sql);
-            while (resultSet.next()) {
-                tables[countTables] = resultSet.getString("table_name");
-                countTables++;
+            if (statement != null) {
+                resultSet = statement.executeQuery(sql);
+                while (resultSet.next()) {
+                    tables[countTables] = resultSet.getString("table_name");
+                    countTables++;
+                }
+                resultSet.close();
+                statement.close();
             }
-            resultSet.close();
-            statement.close();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Can't to perform query");
@@ -351,22 +339,21 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Please register you JDBC driver", e);
         }
-        
         try {
             String url = "jdbc:postgresql://localhost/" + database;
             connection = DriverManager.getConnection(url, user, password);
         } catch (SQLException ePostgresConnection) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
-            } catch (ClassNotFoundException eMysqlConnection) {
-                throw new RuntimeException("Please register you JDBC driver", eMysqlConnection);
+            } catch (ClassNotFoundException eClassNotFoundMySQL) {
+                throw new RuntimeException("Please register you JDBC driver", eClassNotFoundMySQL);
             }
-            String url = "jdbc:mysql://127.0.0.1:3306/" + database + "?useSSL=false";
             try {
+                String url = "jdbc:mysql://127.0.0.1:3306/" + database + "?useSSL=false";
                 connection = DriverManager.getConnection(url, user, password);
-            } catch (SQLException eMysqlConnection) {
+            } catch (SQLException eMySQLException) {
                 connection = null;
-                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), eMysqlConnection);
+                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), eMySQLException);
             }
         }
     }
@@ -394,27 +381,17 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
     @Override
     public int getColumnCount(String tableName) {
-        Statement statement = null;
+        Statement statement;
+        int columnCount = 0;
+        ResultSetMetaData resultSetMetaData;
         try {
             statement = connection.createStatement();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ResultSet resultSet = null;
-        try {
-            resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        ResultSetMetaData resultSetMetaData = null;
-        try {
-            resultSetMetaData = resultSet.getMetaData();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        int columnCount = 0;
-        try {
-            columnCount = resultSetMetaData.getColumnCount();
+            ResultSet resultSet;
+            if (statement != null) {
+                resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
+                resultSetMetaData = resultSet.getMetaData();
+                columnCount = resultSetMetaData.getColumnCount();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -497,24 +474,26 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             statement = connection.createStatement();
             sql = "SHOW \"event_source\"";
             resultSet = statement.executeQuery(sql);
-            while (resultSet.next()){
-                result += resultSet.getString(1);
-            }
+            resultSet.next();
+            result += resultSet.getString(1);
         } catch (SQLException e) {
             try {
                 statement = connection.createStatement();
                 sql =  "SHOW VARIABLES LIKE \"version_comment\"";
                 resultSet = statement.executeQuery(sql);
-                while (resultSet.next()){
-                    result += resultSet.getString(2);
-                }
+                resultSet.next();
+                result += resultSet.getString(2);
             } catch (SQLException e1) {
                 e1.printStackTrace();
             }
         }finally {
             try {
-                resultSet.close();
-                statement.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
