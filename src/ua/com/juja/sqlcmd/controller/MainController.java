@@ -1,5 +1,6 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
@@ -23,28 +24,43 @@ class MainController {
     void run(){
         connectToDb();
 
-        label:
+
         while (true) {
             view.write("Enter command (or command 'help' for help): ");
-            String command = view.read();
-            switch (command) {
-                case "list":
-                    doList();
-                    break;
+            String[] command = view.read().split(" ");
+            switch (command[0]) {
                 case "help":
                     doHelp();
                     break;
+
+                case "list":
+                    doList();
+                    break;
+
+                case "print":
+                    doPrint(command);
+                    break;
+
                 case "connect":
                     connectToDb();
                     break;
+
                 case "exit":
-                    break label;
+                    view.write("See you soon!!!");
+                    System.exit(0);
+
                 default:
-                    view.write("non-existent command: " + command);
+                    view.write("non-existent command: " + Arrays.toString(command));
                     break;
             }
 
         }
+    }
+
+    private void doPrint(String[] command){
+        String tableName = command[1];
+        view.write(manager.getTableString(tableName));
+
     }
 
     private void doList(){
@@ -56,10 +72,16 @@ class MainController {
         view.write("Possible commands:");
         view.write("\tlist");
         view.write("\t\tprint all tables of the connected database");
+
+        view.write("\tprint tableName");
+        view.write("\t\tprint contents of the table tableName");
+
         view.write("\texit");
         view.write("\t\tto exit from the program");
+
         view.write("\tconnect");
         view.write("\t\tto connect to another database");
+
         view.write("\thelp");
         view.write("\t\tprint possible commands");
 
