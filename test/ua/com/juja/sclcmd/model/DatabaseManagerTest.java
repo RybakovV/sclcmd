@@ -140,5 +140,11 @@ public abstract class DatabaseManagerTest {
         assertEquals("[]", Arrays.toString(manager.getTableData(tableName)));
     }
 
+    @Test
+    public void testGetColumnNames(){
+        String tableName = "user";
+        assertEquals("[id, name, password]", Arrays.toString(manager.getColumnNames(tableName)));
+    }
+
 
 }

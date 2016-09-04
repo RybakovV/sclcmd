@@ -41,6 +41,10 @@ class MainController {
                     doPrint(command);
                     break;
 
+                case "insert":
+                    doInsert(command);
+                    break;
+
                 case "connect":
                     connectToDb();
                     break;
@@ -55,6 +59,19 @@ class MainController {
             }
 
         }
+    }
+
+    private void doInsert(String[] command) {
+        String tableName = command[1];
+        view.write("Enter the data you want to change:");
+        String[] columnName = manager.getColumnNames(tableName);
+        DataSet insertData = new DataSet();
+        for (String aColumnName : columnName) {
+            view.write("Input " + aColumnName + ":");
+            Object value = view.read();
+            insertData.put(aColumnName, value);
+        }
+        manager.insert(tableName, insertData);
     }
 
     private void doPrint(String[] command){
@@ -75,6 +92,12 @@ class MainController {
 
         view.write("\tprint tableName");
         view.write("\t\tprint contents of the table tableName");
+
+        view.write("\tinsert tableName");
+        view.write("\t\tinsert data to the table tableName");
+
+        view.write("\tupdate tableName");
+        view.write("\t\tupdate data of the table tableName");
 
         view.write("\texit");
         view.write("\t\tto exit from the program");

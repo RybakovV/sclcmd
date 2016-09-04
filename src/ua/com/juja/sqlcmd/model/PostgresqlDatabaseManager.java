@@ -399,6 +399,26 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
+    public String[] getColumnNames(String tableName) {
+        int columnCount = getColumnCount(tableName);
+        String[] columnNames = new String[columnCount];
+        Statement statement;
+        ResultSet resultSet;
+        ResultSetMetaData resultSetMetaData;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
+            resultSetMetaData = resultSet.getMetaData();
+            for (int i = 0; i < columnCount ; i++) {
+                columnNames[i] = resultSetMetaData.getColumnName(i+1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return columnNames;
+    }
+
+    @Override
     public void insert(String tableName, DataSet data) {
         Statement statement;
         try {
