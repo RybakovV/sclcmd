@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.controller;
 
+import ua.com.juja.sqlcmd.controller.command.Command;
+import ua.com.juja.sqlcmd.controller.command.Exit;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
@@ -14,10 +16,14 @@ class MainController {
 
     private View view;
     private DatabaseManager manager;
+    private Command[] commands;
 
     MainController(View view, DatabaseManager manager){
         this.view = view;
         this.manager = manager;
+        this.commands = new Command[]{new Exit(view)};
+
+
     }
 
     void run(){
@@ -27,6 +33,10 @@ class MainController {
         while (true) {
             view.write("Enter command (or command 'help' for help): ");
             String[] command = view.read().split(" ");
+            if (commands[0].canProcess(command[0])){
+                commands[0].process(command[0]);
+            }
+
             switch (command[0]) {
                 case "help":
                     doHelp();
@@ -53,7 +63,7 @@ class MainController {
                     break;
 
                 case "exit":
-                    view.write("See you soon!!!");
+                    view.write("See you soon");
                     System.exit(0);
 
                 default:
