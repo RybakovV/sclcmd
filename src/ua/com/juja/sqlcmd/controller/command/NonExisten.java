@@ -5,23 +5,20 @@ import ua.com.juja.sqlcmd.viuw.View;
 /**
  * Created by MEBELBOS-2 on 04.09.2016.
  */
-public class Exit implements Command {
-
+public class NonExisten implements Command {
     private View view;
 
-    public Exit(View view){
+    public NonExisten(View view){
         this.view = view;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return command.equals("exit");
+        return true;
     }
 
     @Override
     public void process(String command) {
-        view.write("See you soon!!!");
-        System.exit(0);
-
+        view.write("non-existent command: " + command);
     }
 }
