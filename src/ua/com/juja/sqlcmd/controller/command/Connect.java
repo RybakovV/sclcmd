@@ -6,12 +6,15 @@ import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.View;
 
+
+
 /**
  * Created by MEBELBOS-2 on 04.09.2016.
  */
 public class Connect implements Command {
     private View view;
     private DatabaseManager manager;
+
 
     public Connect(View view, DatabaseManager manager) {
         this.view = view;
@@ -25,7 +28,6 @@ public class Connect implements Command {
 
     @Override
     public void process(String command) {
-        view.write("Hello");
         while (true){
             view.write("Enter Database name: ");
             String databaseName = view.read();
@@ -49,7 +51,7 @@ public class Connect implements Command {
                 if (e.getCause() != null){
                     message += " " + e.getCause().getMessage();
                 }
-                view.write("Yuo do not connected to database. Because: " + message);
+                view.write("You do not connected to database. Because: " + message);
                 view.write("Try again");
             }
         }

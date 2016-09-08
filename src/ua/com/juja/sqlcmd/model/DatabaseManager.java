@@ -43,4 +43,6 @@ public interface DatabaseManager {
     void setUserPassword(String userPassword);
 
     String getVersionDatabase();
+
+    boolean isConnected();
 }

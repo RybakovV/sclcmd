@@ -19,6 +19,10 @@ public class Help implements Command {
     @Override
     public void process(String command) {
         view.write("Possible commands:");
+
+        view.write("\tconnect");
+        view.write("\t\tfor connect to database");
+
         view.write("\tlist");
         view.write("\t\tprint all tables of the connected database");
 
@@ -33,9 +37,6 @@ public class Help implements Command {
 
         view.write("\texit");
         view.write("\t\tto exit from the program");
-
-        view.write("\tconnect");
-        view.write("\t\tto connect to another database");
 
         view.write("\thelp");
         view.write("\t\tprint possible commands");

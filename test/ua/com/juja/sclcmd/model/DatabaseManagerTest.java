@@ -53,11 +53,19 @@ public abstract class DatabaseManagerTest {
 
     @Test
     public void testGetTableStringTableTest(){
-        String tableName = "test";
-        assertEquals(
-                        "╔════╗\n" +
-                        "║ id ║\n" +
-                        "╚════╝\n", manager.getTableString(tableName));
+        String tableName = "test-sql";
+        if (manager.getVersionDatabase().equals("PostgreSQL")){
+            assertEquals(
+                                    "╔═══════════════════════════╗\n" +
+                                    "║ Table 'test-sql' is empty ║\n" +
+                                    "╚═══════════════════════════╝", manager.getTableString(tableName));
+
+        }else {
+            assertEquals(
+                            "╔════╗\n" +
+                            "║ id ║\n" +
+                            "╚════╝\n", manager.getTableString(tableName));
+        }
     }
 
 
@@ -75,11 +83,12 @@ public abstract class DatabaseManagerTest {
     public void testGetColumnCount(){
         if (manager.getVersionDatabase().equals("PostgreSQL")){
             assertEquals(0,manager.getColumnCount("empty"));
+            assertEquals(1,manager.getColumnCount("test"));
 
         }else{
             assertEquals(1,manager.getColumnCount("empty"));
+            assertEquals(1,manager.getColumnCount("test-sql"));
         }
-        assertEquals(1,manager.getColumnCount("test"));
         assertEquals(3,manager.getColumnCount("user"));
     }
 
@@ -113,7 +122,13 @@ public abstract class DatabaseManagerTest {
     public void testGetAllTablesOfDataBase(){
         String[] tables = manager.getAllTablesOfDataBase();
         Arrays.sort(tables);
-        assertEquals("[empty, test, user]", Arrays.toString(tables));
+        if (manager.getVersionDatabase().equals("PostgreSQL")){
+            assertEquals("[empty, test, user]", Arrays.toString(tables));
+        }else{
+            assertEquals("[empty, test-sql, user]", Arrays.toString(tables));
+        }
+
+
     }
 
     @Test

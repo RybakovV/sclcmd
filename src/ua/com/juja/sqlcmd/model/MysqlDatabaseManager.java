@@ -39,7 +39,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
         try {
             int columnCount = getColumnCount(tableName);
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM " + tableName);
+            resultSet = statement.executeQuery("SELECT * FROM `" + tableName + "`");
             while (resultSet.next()) {
                 result += "║";
                 for (int i = 1; i <= columnCount; i++) {
@@ -130,7 +130,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
             result += "╗\n";
             statement = connection.createStatement();
             resultSet = statement.executeQuery(
-                    "SELECT * FROM " + tableName);
+                    "SELECT * FROM `" + tableName + "`");
             resultSetMetaData = resultSet.getMetaData();
             for (int i = 1; i <= columnCount; i++) {
                 result += "║";
@@ -256,7 +256,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
             statement = connection.createStatement();
             if (statement != null) {
                 resultSet = statement.executeQuery(
-                        "SELECT * FROM " + tableName );
+                        "SELECT * FROM `" + tableName +"`" );
                 resultSetMetaData = resultSet.getMetaData();
                 int columnCount = resultSetMetaData.getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
@@ -289,7 +289,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
         ResultSet resultSet;
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT COUNT(*) FROM " + tableName);
+            resultSet = statement.executeQuery("SELECT COUNT(*) FROM `" + tableName + "`");
             resultSet.next();
             countRows = resultSet.getInt(1);
             resultSet.close();
@@ -393,7 +393,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
         ResultSetMetaData resultSetMetaData;
         try {
             statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM " + tableName);
+            resultSet = statement.executeQuery("SELECT * FROM `" + tableName + "`");
             resultSetMetaData = resultSet.getMetaData();
             columnCount = resultSetMetaData.getColumnCount();
         } catch (SQLException e) {
@@ -518,5 +518,10 @@ public class MysqlDatabaseManager implements DatabaseManager {
             }
         }
         return result.split(" ")[0];
+    }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null;
     }
 }

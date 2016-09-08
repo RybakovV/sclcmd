@@ -521,4 +521,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         return result.split(" ")[0];
     }
 
+    @Override
+    public boolean isConnected() {
+        return connection != null;
+    }
+
 }
