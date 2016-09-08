@@ -14,6 +14,7 @@ import ua.com.juja.sqlcmd.viuw.View;
 public class Connect implements Command {
     private View view;
     private DatabaseManager manager;
+    private Command[] commands = null;
 
 
     public Connect(View view, DatabaseManager manager) {
@@ -39,9 +40,29 @@ public class Connect implements Command {
                 manager.connectToDataBase(databaseName, userName, userPassword);
                 if (manager.getVersionDatabase().equals("MySQL")){
                     manager = new MysqlDatabaseManager();
+                    commands = new Command[]{
+                            new Help(view),
+                            new Exit(view),
+                            new Connect(view, manager),
+                            new IsConnected(view, manager),
+                            new List(view, manager),
+                            new Print(view, manager),
+                            new Edit(view, manager),
+                            new Insert(view, manager),
+                            new NonExisten(view)};
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
                 if (manager.getVersionDatabase().equals(("PostgreSQL"))){
+                    commands = new Command[]{
+                            new Help(view),
+                            new Exit(view),
+                            new Connect(view, manager),
+                            new IsConnected(view, manager),
+                            new List(view, manager),
+                            new Print(view, manager),
+                            new Edit(view, manager),
+                            new Insert(view, manager),
+                            new NonExisten(view)};
                     manager = new PostgresqlDatabaseManager();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
