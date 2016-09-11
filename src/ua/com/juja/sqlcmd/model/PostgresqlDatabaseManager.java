@@ -219,7 +219,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
     @Override
     public String getEmptyTable(String tableName) {
-        String textEmptyTable="║ Table '" + tableName + "' is empty ║";
+        String textEmptyTable="║ Table '" + tableName + "' is empty or does not exist ║";
         String result = "╔";
         for (int i = 0; i < textEmptyTable.length()-2; i++) {
             result += "═";
@@ -393,7 +393,8 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
                 columnCount = resultSetMetaData.getColumnCount();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            return columnCount;
         }
         return columnCount;
     }
@@ -402,18 +403,21 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     public String[] getColumnNames(String tableName) {
         int columnCount = getColumnCount(tableName);
         String[] columnNames = new String[columnCount];
-        Statement statement;
-        ResultSet resultSet;
-        ResultSetMetaData resultSetMetaData;
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
-            resultSetMetaData = resultSet.getMetaData();
-            for (int i = 0; i < columnCount ; i++) {
-                columnNames[i] = resultSetMetaData.getColumnName(i+1);
+        if (columnCount>0){
+            Statement statement;
+            ResultSet resultSet;
+            ResultSetMetaData resultSetMetaData;
+            try {
+                statement = connection.createStatement();
+                resultSet = statement.executeQuery("SELECT * FROM public." + tableName);
+                resultSetMetaData = resultSet.getMetaData();
+                for (int i = 0; i < columnCount ; i++) {
+                    columnNames[i] = resultSetMetaData.getColumnName(i+1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
         }
         return columnNames;
     }

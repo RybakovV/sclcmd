@@ -25,21 +25,43 @@ public class Main {
                 new IsConnected(view, manager)};
 
         view.write("Hello");
-        while (true) {
-            view.write("Enter command (or command 'help' for help): ");
-            String input = view.read();
-            if (input.equals("connect")){
-                doConnect();
-            }else {
-                for (Command command: commands) {
-                    if (command.canProcess(input)){
-                        command.process(input);
-                        break;
+        try{
+            while (true) {
+                view.write("Enter command (or command 'help' for help): ");
+                String input = view.read();
+                if (input.equals("connect")){
+                    doConnect();
+                }else {
+                    for (Command command: commands) {
+                        try {
+                            if (command.canProcess(input)){
+                                command.process(input);
+                                break;
+                            }
+                        }catch (Exception e){
+                            if (e instanceof ExitException) {
+                                throw e;
+                            }
+                            printError(e);
+                            break;
+                        }
                     }
                 }
             }
+        }catch (ExitException e){
+            //do nothing
+            //System.exit(0);
         }
 
+    }
+
+    private static void printError(Exception e) {
+        String message = e.getMessage();
+        if (e.getCause() != null){
+            message += " " + e.getCause().getMessage();
+        }
+        view.write("Command failed. Because: " + message);
+        view.write("Try again");
     }
 
     private static void doConnect() {

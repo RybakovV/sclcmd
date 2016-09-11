@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
+
 import java.sql.*;
 import java.util.Arrays;
 
@@ -231,7 +233,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
 
     @Override
     public String getEmptyTable(String tableName) {
-        String textEmptyTable="║ Table '" + tableName + "' is empty ║";
+        String textEmptyTable="║ Table '" + tableName + "' is empty or does not exist ║";
         String result = "╔";
         for (int i = 0; i < textEmptyTable.length()-2; i++) {
             result += "═";
@@ -255,8 +257,12 @@ public class MysqlDatabaseManager implements DatabaseManager {
         try {
             statement = connection.createStatement();
             if (statement != null) {
-                resultSet = statement.executeQuery(
-                        "SELECT * FROM `" + tableName +"`" );
+                try {
+                    resultSet = statement.executeQuery(
+                            "SELECT * FROM `" + tableName +"`" );
+                }catch (MySQLSyntaxErrorException e){
+                    return 0;
+                }
                 resultSetMetaData = resultSet.getMetaData();
                 int columnCount = resultSetMetaData.getColumnCount();
                 for (int i = 1; i <= columnCount; i++) {
@@ -397,27 +403,33 @@ public class MysqlDatabaseManager implements DatabaseManager {
             resultSetMetaData = resultSet.getMetaData();
             columnCount = resultSetMetaData.getColumnCount();
         } catch (SQLException e) {
-            e.printStackTrace();
+            //do nothing
+            //e.printStackTrace();
+            //throw new SQLException(e);
+            return columnCount;
         }
         return columnCount;
     }
+
 
     @Override
     public String[] getColumnNames(String tableName) {
         int columnCount = getColumnCount(tableName);
         String[] columnNames = new String[columnCount];
-        Statement statement;
-        ResultSet resultSet;
-        ResultSetMetaData resultSetMetaData;
-        try {
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM " + tableName);
-            resultSetMetaData = resultSet.getMetaData();
-            for (int i = 0; i < columnCount ; i++) {
-                columnNames[i] = resultSetMetaData.getColumnName(i+1);
+        if (columnCount>0){
+            Statement statement;
+            ResultSet resultSet;
+            ResultSetMetaData resultSetMetaData;
+            try {
+                statement = connection.createStatement();
+                resultSet = statement.executeQuery("SELECT * FROM " + tableName);
+                resultSetMetaData = resultSet.getMetaData();
+                for (int i = 0; i < columnCount ; i++) {
+                    columnNames[i] = resultSetMetaData.getColumnName(i+1);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return columnNames;
     }

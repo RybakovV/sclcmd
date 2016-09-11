@@ -1,9 +1,13 @@
 package ua.com.juja.sqlcmd.controller.command;
 
+
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import sun.nio.ch.FileChannelImpl;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.viuw.View;
+
+import java.sql.SQLException;
 
 /**
  * Created by MEBELBOS-2 on 04.09.2016.
@@ -30,16 +34,20 @@ public class Edit implements Command {
                 throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
             }
             String tableName = command[1];
-            view.write("Enter the data when you want to change (edit):");
             String[] columnName = manager.getColumnNames(tableName);
-            DataSet insertData = new DataSet();
-            int dataChange = Integer.parseInt(view.read());
-            for (String aColumnName : columnName) {
-                view.write("Input " + aColumnName + ":");
-                Object value = view.read();
-                insertData.put(aColumnName, value);
+            if (columnName.length > 0){
+                view.write("Enter the data when you want to change (edit).");
+                DataSet insertData = new DataSet();
+                int dataChange = Integer.parseInt(view.read());
+                for (String aColumnName : columnName) {
+                    view.write("Input " + aColumnName + ":");
+                    Object value = view.read();
+                    insertData.put(aColumnName, value);
+                }
+                manager.update(tableName, dataChange, insertData);
+            }else{
+                throw new Exception("Table '" + tableName +"' doesn't exist");
             }
-            manager.update(tableName, dataChange, insertData);
         }catch (Exception e){
             printError(e);
         }

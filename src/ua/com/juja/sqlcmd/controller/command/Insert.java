@@ -30,15 +30,19 @@ public class Insert implements Command {
                 throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
             }
             String tableName = command[1];
-            view.write("Enter the data when you want to insert:");
             String[] columnName = manager.getColumnNames(tableName);
-            DataSet insertData = new DataSet();
-            for (String aColumnName : columnName) {
-                view.write("Input " + aColumnName + ":");
-                Object value = view.read();
-                insertData.put(aColumnName, value);
+            if (columnName.length > 0){
+                view.write("Enter the data when you want to insert.");
+                DataSet insertData = new DataSet();
+                for (String aColumnName : columnName) {
+                    view.write("Input " + aColumnName + ":");
+                    Object value = view.read();
+                    insertData.put(aColumnName, value);
+                }
+                manager.insert(tableName, insertData);
+            }else {
+                throw new Exception("Table '" + tableName +"' doesn't exist");
             }
-            manager.insert(tableName, insertData);
         }catch (Exception e){
             printError(e);
         }
