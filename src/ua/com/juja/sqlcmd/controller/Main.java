@@ -7,7 +7,7 @@ import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.Console;
 import ua.com.juja.sqlcmd.viuw.View;
 
-import java.util.Arrays;
+
 
 
 public class Main {
@@ -50,7 +50,6 @@ public class Main {
             }
         }catch (ExitException e){
             //do nothing
-            //System.exit(0);
         }
 
     }
