@@ -1,8 +1,6 @@
 package ua.com.juja.sqlcmd.controller.command;
 
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
-import sun.nio.ch.FileChannelImpl;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.viuw.View;
@@ -10,7 +8,7 @@ import ua.com.juja.sqlcmd.viuw.View;
 import java.sql.SQLException;
 
 /**
- * Created by MEBELBOS-2 on 04.09.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public class Edit implements Command {
     private View view;

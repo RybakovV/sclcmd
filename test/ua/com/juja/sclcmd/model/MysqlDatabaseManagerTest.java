@@ -6,7 +6,7 @@ import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by MEBELBOS-2 on 10.08.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public class MysqlDatabaseManagerTest extends DatabaseManagerTest {
 

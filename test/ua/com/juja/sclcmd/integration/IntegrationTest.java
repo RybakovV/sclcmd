@@ -15,7 +15,7 @@ import java.io.UnsupportedEncodingException;
 import static junit.framework.TestCase.assertEquals;
 
 /**
- * Created by MEBELBOS-2 on 08.09.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public class IntegrationTest {
 

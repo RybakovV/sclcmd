@@ -5,6 +5,9 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import java.sql.*;
 import java.util.Arrays;
 
+/**
+ * Created by Rybakov Vitaliy on 12.09.2016.
+ */
 
 public class MysqlDatabaseManager implements DatabaseManager {
 
@@ -403,9 +406,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
             resultSetMetaData = resultSet.getMetaData();
             columnCount = resultSetMetaData.getColumnCount();
         } catch (SQLException e) {
-            //do nothing
-            //e.printStackTrace();
-            //throw new SQLException(e);
             return columnCount;
         }
         return columnCount;

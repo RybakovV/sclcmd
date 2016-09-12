@@ -4,8 +4,9 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
- * Created by MEBELBOS-2 on 01.09.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
+
 public class Console implements View {
 
     @Override

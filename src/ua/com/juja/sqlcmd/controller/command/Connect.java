@@ -9,7 +9,7 @@ import ua.com.juja.sqlcmd.viuw.View;
 
 
 /**
- * Created by MEBELBOS-2 on 04.09.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public class Connect implements Command {
     private View view;

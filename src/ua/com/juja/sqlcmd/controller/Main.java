@@ -7,7 +7,9 @@ import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.Console;
 import ua.com.juja.sqlcmd.viuw.View;
 
-
+/**
+ * Created by Rybakov Vitaliy on 12.09.2016.
+ */
 
 
 public class Main {

@@ -6,7 +6,7 @@ import ua.com.juja.sqlcmd.viuw.View;
 import java.util.Arrays;
 
 /**
- * Created by MEBELBOS-2 on 04.09.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public class List implements Command {
 

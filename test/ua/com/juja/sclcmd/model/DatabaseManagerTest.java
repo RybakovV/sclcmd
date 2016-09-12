@@ -11,7 +11,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by MEBELBOS-2 on 10.08.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public abstract class DatabaseManagerTest {
 
@@ -40,9 +40,9 @@ public abstract class DatabaseManagerTest {
     public void testGetTableHead(){
         String tableHead = manager.getHeaderOfTheTable("empty");
         if (manager.getVersionDatabase().equals("PostgreSQL")) {
-            assertEquals("╔════════════════════════╗\n" +
-                         "║ Table 'empty' is empty ║\n" +
-                         "╚════════════════════════╝",
+            assertEquals(   "╔══════════════════════════════════════════╗\n" +
+                            "║ Table 'empty' is empty or does not exist ║\n" +
+                            "╚══════════════════════════════════════════╝",
                     tableHead);
         }else {
             assertEquals("╔════╗\n" +
@@ -57,9 +57,9 @@ public abstract class DatabaseManagerTest {
         String tableName = "test-sql";
         if (manager.getVersionDatabase().equals("PostgreSQL")){
             assertEquals(
-                                    "╔═══════════════════════════╗\n" +
-                                    "║ Table 'test-sql' is empty ║\n" +
-                                    "╚═══════════════════════════╝", manager.getTableString(tableName));
+                        "╔═════════════════════════════════════════════╗\n" +
+                        "║ Table 'test-sql' is empty or does not exist ║\n" +
+                        "╚═════════════════════════════════════════════╝", manager.getTableString(tableName));
 
         }else {
             assertEquals(
@@ -107,9 +107,9 @@ public abstract class DatabaseManagerTest {
 
         String tablesString = manager.getTableString("empty");
         if (manager.getVersionDatabase().equals("PostgreSQL")) {
-            assertEquals("╔════════════════════════╗\n" +
-                         "║ Table 'empty' is empty ║\n" +
-                         "╚════════════════════════╝",
+            assertEquals(   "╔══════════════════════════════════════════╗\n" +
+                            "║ Table 'empty' is empty or does not exist ║\n" +
+                            "╚══════════════════════════════════════════╝",
                     tablesString);
         }else {
             assertEquals("╔════╗\n" +

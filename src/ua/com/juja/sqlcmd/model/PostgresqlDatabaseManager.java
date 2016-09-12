@@ -3,6 +3,9 @@ package ua.com.juja.sqlcmd.model;
 import java.sql.*;
 import java.util.Arrays;
 
+/**
+ * Created by Rybakov Vitaliy on 12.09.2016.
+ */
 
 public class PostgresqlDatabaseManager implements DatabaseManager {
 

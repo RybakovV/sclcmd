@@ -1,7 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
 /**
- * Created by MEBELBOS-2 on 31.08.2016.
+ * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public interface DatabaseManager {
     String getTableString(String tableName);
