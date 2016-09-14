@@ -19,9 +19,9 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class IntegrationTest {
 
-    private static ConfigurableInputStream in;
-    private static ByteArrayOutputStream out;
-    private static DatabaseManager manager;
+    private ConfigurableInputStream in;
+    private ByteArrayOutputStream out;
+    private DatabaseManager manager;
 
 
     @Before
@@ -50,6 +50,11 @@ public class IntegrationTest {
 
     }
 
+    @Test
+    public void testInputNullFail() {
+        in.add("");
+
+    }
     @Test
     public void testInsertFail(){
         in.add("connect");
@@ -166,6 +171,7 @@ public class IntegrationTest {
         in.add("mysqlcmd");
         in.add("root");
         in.add("root");
+        in.add("edit");
         in.add("edit users");
         in.add("exit");
         Main.main(new String[0]);
@@ -174,10 +180,18 @@ public class IntegrationTest {
                 "Enter command (or command 'help' for help): \n" +
                 //connect
                 "Enter Database name: \n" +
+                //mysqlcmd
                 "Enter userName\n" +
+                //root
                 "Enter password\n" +
+                //root
                 "You connected to MySQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //edit
+                "Command failed. Because: incorrect number of parameters. Expected 1, but is 0\n" +
+                "Try again\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //edit users
                 "Command failed. Because: Table 'users' doesn't exist\n" +
                 "Try again\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -295,6 +309,15 @@ public class IntegrationTest {
         in.add("Pukin Stiven in pgsqlcmd");
         in.add("Pasword");
         in.add("print user");
+
+        in.add("connect");
+        in.add("mysqlcmd");
+        in.add("root");
+        in.add("root");
+        in.add("list sqlcmd");
+        in.add("list");
+        in.add("print user");
+
         in.add("exit");
 
 
@@ -504,16 +527,39 @@ public class IntegrationTest {
                 "╚══════════════════════════╩══════════════════════════╩══════════════════════════╝\n" +
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //connect
+                "Enter Database name: \n" +
+                //mysqlcmd
+                "Enter userName\n" +
+                //root
+                "Enter password\n" +
+                //root
+                "You connected to MySQL database\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //list sqlcmd
+                "non-existent command: list sqlcmd\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //list
+                "[empty, test-sql, user]\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //print user
+                "╔══════════════╦══════════════╦══════════════╗\n" +
+                "║      id      ║     name     ║   password   ║\n" +
+                "╠══════════════╬══════════════╬══════════════╣\n" +
+                "║      13      ║    Pupkin    ║     pswd     ║\n" +
+                "╠══════════════╬══════════════╬══════════════╣\n" +
+                "║      18      ║ Pukin Stiven ║   Pasword    ║\n" +
+                "╚══════════════╩══════════════╩══════════════╝\n" +
+                "\n" +
+                "Enter command (or command 'help' for help): \n" +
                 //exit
                 "See you soon!!!\n";
         assertEquals(expected, actusal);
     }
 
-    public String getData() {
+    private String getData() {
         try {
-            String result = "";
-            result = new String(out.toByteArray(), "UTF-8").replace("\r\n","\n");
-            return result;
+            return new String(out.toByteArray(), "UTF-8").replace("\r\n","\n");
         } catch (UnsupportedEncodingException e) {
             return e.getMessage();
         }
