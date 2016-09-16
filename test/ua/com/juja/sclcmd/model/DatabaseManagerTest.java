@@ -63,9 +63,9 @@ public abstract class DatabaseManagerTest {
 
         }else {
             assertEquals(
-                            "╔════╗\n" +
-                            "║ id ║\n" +
-                            "╚════╝\n", manager.getTableString(tableName));
+                            "╔════════════╦════════════╗\n" +
+                            "║    ids     ║ first-name ║\n" +
+                            "╚════════════╩════════════╝\n", manager.getTableString(tableName));
         }
     }
 
@@ -84,11 +84,11 @@ public abstract class DatabaseManagerTest {
     public void testGetColumnCount(){
         if (manager.getVersionDatabase().equals("PostgreSQL")){
             assertEquals(0,manager.getColumnCount("empty"));
-            assertEquals(1,manager.getColumnCount("test"));
+            assertEquals(2,manager.getColumnCount("test"));
 
         }else{
             assertEquals(1,manager.getColumnCount("empty"));
-            assertEquals(1,manager.getColumnCount("test-sql"));
+            assertEquals(2,manager.getColumnCount("test-sql"));
         }
         assertEquals(3,manager.getColumnCount("user"));
     }

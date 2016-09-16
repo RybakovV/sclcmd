@@ -26,7 +26,7 @@ public class IsConnected implements Command {
     @Override
     public void process(String command) {
 
-        view.write("You mast connected to database with command 'connected'");
+        view.write("You must connected to database with command 'connected'");
     }
 
 }

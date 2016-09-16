@@ -332,6 +332,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
         }
         tables = Arrays.copyOf(tables, countTables, String[].class);
+        Arrays.sort(tables);
         return tables;
     }
 

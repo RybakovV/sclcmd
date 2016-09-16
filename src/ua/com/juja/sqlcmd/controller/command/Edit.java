@@ -26,37 +26,25 @@ public class Edit implements Command {
 
     @Override
     public void process(String input) {
-        try{
-            String[] command = input.split(" ");
-            if (command.length != 2){
-                throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
+        String[] command = input.split(" ");
+        if (command.length != 2){
+            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
+        }
+        String tableName = command[1];
+        String[] columnName = manager.getColumnNames(tableName);
+        if (columnName.length > 0){
+            view.write("Enter the data when you want to change (edit).");
+            DataSet insertData = new DataSet();
+            int dataChange = Integer.parseInt(view.read());
+            for (String aColumnName : columnName) {
+                view.write("Input " + aColumnName + ":");
+                Object value = view.read();
+                insertData.put(aColumnName, value);
             }
-            String tableName = command[1];
-            String[] columnName = manager.getColumnNames(tableName);
-            if (columnName.length > 0){
-                view.write("Enter the data when you want to change (edit).");
-                DataSet insertData = new DataSet();
-                int dataChange = Integer.parseInt(view.read());
-                for (String aColumnName : columnName) {
-                    view.write("Input " + aColumnName + ":");
-                    Object value = view.read();
-                    insertData.put(aColumnName, value);
-                }
-                manager.update(tableName, dataChange, insertData);
-            }else{
-                throw new Exception("Table '" + tableName +"' doesn't exist");
-            }
-        }catch (Exception e){
-            printError(e);
+            manager.update(tableName, dataChange, insertData);
+        }else{
+            throw new IllegalArgumentException("Table '" + tableName +"' doesn't exist");
         }
     }
 
-    private void printError(Exception e) {
-        String message = e.getMessage();
-        if (e.getCause() != null){
-            message += " " + e.getCause().getMessage();
-        }
-        view.write("Command failed. Because: " + message);
-        view.write("Try again");
-    }
 }

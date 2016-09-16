@@ -107,9 +107,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
     @Override
     public String getHeaderOfTheTable(String tableName) {
         int maxColumnSize = getMaxColumnSize(tableName);
-        if (maxColumnSize == 0) {
-            return getEmptyTable(tableName);
-        }
         String result = "";
         Statement statement;
         ResultSet resultSet;
@@ -339,6 +336,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
 
         }
         tables = Arrays.copyOf(tables, countTables, String[].class);
+        Arrays.sort(tables);
         return tables;
     }
 

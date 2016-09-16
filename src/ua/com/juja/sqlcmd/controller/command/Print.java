@@ -23,25 +23,12 @@ public class Print implements Command {
 
     @Override
     public void process(String input) {
-        try {
-            String[] command = input.split(" ");
-            if (command.length != 2) {
-                throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
-            }
-            String tableName = command[1];
-            view.write(manager.getTableString(tableName));
-        }catch (Exception e){
-            printError(e);
+        String[] command = input.split(" ");
+        if (command.length != 2) {
+            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
         }
-
+        String tableName = command[1];
+        view.write(manager.getTableString(tableName));
     }
 
-    private void printError(Exception e) {
-        String message = e.getMessage();
-        if (e.getCause() != null){
-            message += " " + e.getCause().getMessage();
-        }
-        view.write("Command failed. Because: " + message);
-        view.write("Try again");
-    }
 }

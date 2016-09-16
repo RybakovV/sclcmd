@@ -215,13 +215,17 @@ public class IntegrationTest {
                 "Enter command (or command 'help' for help): \n" +
                 //connect
                 "Enter Database name: \n" +
+                //mysqlcmd
                 "Enter userName\n" +
+                //root
                 "Enter password\n" +
+                //root
                 "You connected to MySQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
-                "╔════╗\n" +
-                "║ id ║\n" +
-                "╚════╝\n" +
+                //print test-sql
+                "╔════════════╦════════════╗\n" +
+                "║    ids     ║ first-name ║\n" +
+                "╚════════════╩════════════╝\n" +
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 "See you soon!!!\n";
@@ -326,10 +330,10 @@ public class IntegrationTest {
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //list
-                "You mast connected to database with command 'connected'\n" +
+                "You must connected to database with command 'connected'\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //helps
-                "You mast connected to database with command 'connected'\n" +
+                "You must connected to database with command 'connected'\n" +
                 "Enter command (or command 'help' for help): \n"+
                 //help
                 "Possible commands:\n" +
@@ -377,10 +381,10 @@ public class IntegrationTest {
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print test-sql
-                "╔════╗\n" +
-                "║ id ║\n" +
-                "╚════╝\n" +
-                "\n" +
+                "╔════════════╦════════════╗\n" +
+                "║    ids     ║ first-name ║\n" +
+                "╚════════════╩════════════╝\n" +
+                "\n"+
                 "Enter command (or command 'help' for help): \n" +
                 //print empty
                 "╔════╗\n" +
@@ -448,7 +452,7 @@ public class IntegrationTest {
                 "You connected to PostgreSQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //list
-                "[user, empty, test]\n" +
+                "[empty, test, user]\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print USERS
                 "╔══════════════════════════════════════════╗\n" +
@@ -468,9 +472,9 @@ public class IntegrationTest {
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print test
-                "╔════╗\n" +
-                "║ id ║\n" +
-                "╚════╝\n" +
+                "╔════════════╦════════════╗\n" +
+                "║    idp     ║ first_name ║\n" +
+                "╚════════════╩════════════╝\n" +
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print empty
