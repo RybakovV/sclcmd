@@ -30,6 +30,7 @@ public class DataSet {
     Data data[] = new Data[100]; //TODO bad magic number
 
     public int index = 0;
+
     public void put(String columnName, Object value) {
         data[index] = new Data(columnName, value);
         index++;
