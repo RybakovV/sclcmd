@@ -48,16 +48,19 @@ public class PrintTest {
         //when
         command.process("print users");
         //then
+        shouldPrint("[╔════════════════╦════════════════╦════════════════╗\n" +
+                     "║       id       ║      name      ║    password    ║\n" +
+                     "╠════════════════╬════════════════╬════════════════╣\n" +
+                     "║       1        ║ Stiven Pupkin  ║     123456     ║\n" +
+                     "╠════════════════╬════════════════╬════════════════╣\n" +
+                     "║       2        ║  Eva Pupkina   ║     789456     ║\n" +
+                     "╚════════════════╩════════════════╩════════════════╝\n" + "]");
+    }
+
+    private void shouldPrint(String expected) {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
-        assertEquals("[╔════════════════╦════════════════╦════════════════╗\n" +
-                      "║       id       ║      name      ║    password    ║\n" +
-                      "╠════════════════╬════════════════╬════════════════╣\n" +
-                      "║       1        ║ Stiven Pupkin  ║     123456     ║\n" +
-                      "╠════════════════╬════════════════╬════════════════╣\n" +
-                      "║       2        ║  Eva Pupkina   ║     789456     ║\n" +
-                      "╚════════════════╩════════════════╩════════════════╝\n" + "]",
-                captor.getAllValues().toString());
+        assertEquals(expected, captor.getAllValues().toString());
     }
 
     @Test
@@ -69,12 +72,9 @@ public class PrintTest {
         //when
         command.process("print test");
         //then
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
-        assertEquals("[╔═════════════════════════════════════════╗\n" +
-                      "║ Table 'test' is empty or does not exist ║\n" +
-                      "╚═════════════════════════════════════════╝]",
-                captor.getAllValues().toString());
+        shouldPrint("[╔═════════════════════════════════════════╗\n" +
+                     "║ Table 'test' is empty or does not exist ║\n" +
+                     "╚═════════════════════════════════════════╝]");
     }
 
 
