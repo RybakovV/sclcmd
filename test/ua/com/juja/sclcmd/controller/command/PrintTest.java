@@ -43,8 +43,7 @@ public class PrintTest {
         user2.put("name", "Eva Pupkina");
         user2.put("password", "789456");
         DataSet[] dataSets = new DataSet[]{user1, user2};
-        Mockito.when(manager.getTableData("users"))
-                .thenReturn(dataSets);
+        Mockito.when(manager.getTableData("users")).thenReturn(dataSets);
         //when
         command.process("print users");
         //then
@@ -66,9 +65,7 @@ public class PrintTest {
     @Test
     public void PrintNotExistingTable(){
         //given
-        DataSet[] test = new DataSet[0];
-        Mockito.when(manager.getTableData("test")).
-                thenReturn(test);
+        Mockito.when(manager.getTableData("test")).thenReturn(new DataSet[0]);
         //when
         command.process("print test");
         //then
@@ -76,8 +73,6 @@ public class PrintTest {
                      "║ Table 'test' is empty or does not exist ║\n" +
                      "╚═════════════════════════════════════════╝]");
     }
-
-
 
     @Test
     public void testCanProcessPrintString(){
