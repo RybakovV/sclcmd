@@ -223,10 +223,9 @@ public class IntegrationTest {
                 "You connected to MySQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print test-sql
-                "╔════════════╦════════════╗\n" +
-                "║    ids     ║ first-name ║\n" +
-                "╚════════════╩════════════╝\n" +
-                "\n" +
+                "╔═════════════════════════════════════════════╗\n" +
+                "║ Table 'test-sql' is empty or does not exist ║\n" +
+                "╚═════════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
                 "See you soon!!!\n";
         assertEquals(expected, actusal);
@@ -381,16 +380,14 @@ public class IntegrationTest {
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print test-sql
-                "╔════════════╦════════════╗\n" +
-                "║    ids     ║ first-name ║\n" +
-                "╚════════════╩════════════╝\n" +
-                "\n"+
+                "╔═════════════════════════════════════════════╗\n" +
+                "║ Table 'test-sql' is empty or does not exist ║\n" +
+                "╚═════════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print empty
-                "╔════╗\n" +
-                "║ id ║\n" +
-                "╚════╝\n" +
-                "\n" +
+                "╔══════════════════════════════════════════╗\n" +
+                "║ Table 'empty' is empty or does not exist ║\n" +
+                "╚══════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //insert
                 "Command failed. Because: incorrect number of parameters. Expected 1, but is 0\n" +
@@ -472,10 +469,9 @@ public class IntegrationTest {
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print test
-                "╔════════════╦════════════╗\n" +
-                "║    idp     ║ first_name ║\n" +
-                "╚════════════╩════════════╝\n" +
-                "\n" +
+                "╔═════════════════════════════════════════╗\n" +
+                "║ Table 'test' is empty or does not exist ║\n" +
+                "╚═════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print empty
                 "╔══════════════════════════════════════════╗\n" +

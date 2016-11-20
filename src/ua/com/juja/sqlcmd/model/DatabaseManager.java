@@ -4,17 +4,9 @@ package ua.com.juja.sqlcmd.model;
  * Created by Rybakov Vitaliy on 12.09.2016.
  */
 public interface DatabaseManager {
-    String getTableString(String tableName);
 
-    String getStringTableData(String tableName);
-
-    String getHeaderOfTheTable(String tableName);
 
     DataSet[] getTableData(String tableName);
-
-    String getEmptyTable(String tableName);
-
-    int getMaxColumnSize(String tableName);
 
     String[] getAllTablesOfDataBase();
 
@@ -45,4 +37,6 @@ public interface DatabaseManager {
     String getVersionDatabase();
 
     boolean isConnected();
+
+
 }

@@ -34,51 +34,11 @@ public abstract class DatabaseManagerTest {
        data.put("password", "pswd");
        data.put("name", "Stivennnn");
        manager.insert(tableName, data);
+
+       DataSet[] arrayDataSet = new DataSet[]{data};
+
     }
 
-    @Test
-    public void testGetTableHead(){
-        String tableHead = manager.getHeaderOfTheTable("empty");
-        if (manager.getVersionDatabase().equals("PostgreSQL")) {
-            assertEquals(   "╔══════════════════════════════════════════╗\n" +
-                            "║ Table 'empty' is empty or does not exist ║\n" +
-                            "╚══════════════════════════════════════════╝",
-                    tableHead);
-        }else {
-            assertEquals("╔════╗\n" +
-                         "║ id ║\n" +
-                         "╚════╝\n",
-                    tableHead);
-        }
-    }
-
-    @Test
-    public void testGetTableStringTableTest(){
-        String tableName = "test-sql";
-        if (manager.getVersionDatabase().equals("PostgreSQL")){
-            assertEquals(
-                        "╔═════════════════════════════════════════════╗\n" +
-                        "║ Table 'test-sql' is empty or does not exist ║\n" +
-                        "╚═════════════════════════════════════════════╝", manager.getTableString(tableName));
-
-        }else {
-            assertEquals(
-                            "╔════════════╦════════════╗\n" +
-                            "║    ids     ║ first-name ║\n" +
-                            "╚════════════╩════════════╝\n", manager.getTableString(tableName));
-        }
-    }
-
-
-    @Test
-    public void testGetTableString(){
-        assertEquals(
-                "╔════════════╦════════════╦════════════╗\n" +
-                "║     id     ║    name    ║  password  ║\n" +
-                "╠════════════╬════════════╬════════════╣\n" +
-                "║     13     ║ Stivennnn  ║    pswd    ║\n" +
-                "╚════════════╩════════════╩════════════╝\n", manager.getTableString("user"));
-    }
 
     @Test
     public void testGetColumnCount(){
@@ -100,22 +60,6 @@ public abstract class DatabaseManagerTest {
 
         }else{
             assertEquals(1,manager.getColumnCount("empty"));
-        }
-    }
-    @Test
-    public void testPrintTablesData(){
-
-        String tablesString = manager.getTableString("empty");
-        if (manager.getVersionDatabase().equals("PostgreSQL")) {
-            assertEquals(   "╔══════════════════════════════════════════╗\n" +
-                            "║ Table 'empty' is empty or does not exist ║\n" +
-                            "╚══════════════════════════════════════════╝",
-                    tablesString);
-        }else {
-            assertEquals("╔════╗\n" +
-                         "║ id ║\n" +
-                         "╚════╝\n",
-                    tablesString);
         }
     }
 
