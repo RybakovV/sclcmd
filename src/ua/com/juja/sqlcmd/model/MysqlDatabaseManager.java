@@ -20,26 +20,28 @@ public class MysqlDatabaseManager implements DatabaseManager {
     public DataSet[] getTableData(String tableName){
         int tableSize = getCountRows(tableName);
         DataSet[] result = new DataSet[tableSize];
-        try (Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)){
-            if (statement != null) {
-                ResultSetMetaData resultSetMetaData;
-                if (resultSet != null) {
-                    resultSetMetaData = resultSet.getMetaData();
-                    int index = 0;
-                    int columnCount = getColumnCount(tableName);
-                    while (resultSet.next()){
-                        DataSet dataSet = new DataSet();
-                        for (int i = 1; i <= columnCount; i++) {
-                            dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+        if (tableSize > 0){
+            try (Statement statement = connection.createStatement();
+                 ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)){
+                if (statement != null) {
+                    ResultSetMetaData resultSetMetaData;
+                    if (resultSet != null) {
+                        resultSetMetaData = resultSet.getMetaData();
+                        int index = 0;
+                        int columnCount = getColumnCount(tableName);
+                        while (resultSet.next()){
+                            DataSet dataSet = new DataSet();
+                            for (int i = 1; i <= columnCount; i++) {
+                                dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+                            }
+                            result[index] = dataSet;
+                            index++;
                         }
-                        result[index] = dataSet;
-                        index++;
                     }
                 }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return result;
     }
@@ -53,7 +55,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
             resultSet.next();
             countRows = resultSet.getInt(1);
         } catch (SQLException e) {
-            e.printStackTrace();
+            //do nothing
         }
         return countRows;
     }
@@ -172,13 +174,14 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void clear(String tableName) {
+    public String clear(String tableName) {
         String sql = "DELETE FROM " + tableName;
         try (Statement statement = connection.createStatement()){
             statement.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
+            return "The table '" + tableName + "' does not exist";
         }
+        return "The table '" + tableName + "' cleared";
     }
 
     @Override

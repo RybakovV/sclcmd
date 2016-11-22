@@ -20,7 +20,7 @@ public interface DatabaseManager {
 
     void insert(String tableName, DataSet data);
 
-    void clear(String tableName);
+    String clear(String tableName);
 
     String getDatabaseName();
 

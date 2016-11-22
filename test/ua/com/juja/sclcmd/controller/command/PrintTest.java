@@ -32,7 +32,7 @@ public class PrintTest {
     }
 
     @Test
-    public void PrintTable(){
+    public void printTableTest(){
         //given
         DataSet user1 = new DataSet();
         user1.put("id", 1);
@@ -55,6 +55,24 @@ public class PrintTest {
                      "║       2        ║  Eva Pupkina   ║     789456     ║\n" +
                      "╚════════════════╩════════════════╩════════════════╝\n" + "]");
     }
+
+    @Test
+    public void printTableWithOneColumn(){
+        //given
+        DataSet user1 = new DataSet();
+        user1.put("id", 1);
+        DataSet[] dataSets = new DataSet[]{user1};
+        Mockito.when(manager.getTableData("test")).thenReturn(dataSets);
+        //when
+        command.process("print test");
+        //then
+        shouldPrint("[╔════╗\n" +
+                     "║ id ║\n" +
+                     "╠════╣\n" +
+                     "║ 1  ║\n" +
+                     "╚════╝\n" + "]");
+    }
+
 
     private void shouldPrint(String expected) {
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);

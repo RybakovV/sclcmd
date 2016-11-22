@@ -84,6 +84,7 @@ public class Main {
                             new Print(view, manager),
                             new Edit(view, manager),
                             new Insert(view, manager),
+                            new Clear(view, manager),
                             new NonExisten(view)};
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }

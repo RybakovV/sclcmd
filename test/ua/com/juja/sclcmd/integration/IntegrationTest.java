@@ -260,6 +260,7 @@ public class IntegrationTest {
 
     @Test
     public void testAll(){
+        in.add("cleare");
         in.add("list");
         in.add("helps");
         in.add("help");
@@ -320,6 +321,9 @@ public class IntegrationTest {
         in.add("list sqlcmd");
         in.add("list");
         in.add("print user");
+        in.add("clear");
+        in.add("clear user");
+        in.add("print user");
 
         in.add("exit");
 
@@ -328,6 +332,9 @@ public class IntegrationTest {
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //cleare
+                "You must connected to database with command 'connected'\n" +
+                "Enter command (or command 'help' for help): \n"+
                 //list
                 "You must connected to database with command 'connected'\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -346,6 +353,8 @@ public class IntegrationTest {
                 "\t\tinsert data to the table 'tableName'\n" +
                 "\tupdate tableName\n" +
                 "\t\tupdate data of the table 'tableName'\n" +
+                "\tclear tableName\n" +
+                "\t\tclear data of the table 'tableName'\n" +
                 "\texit\n" +
                 "\t\tto exit from the program\n" +
                 "\thelp\n" +
@@ -551,6 +560,18 @@ public class IntegrationTest {
                 "║      18      ║ Pukin Stiven ║   Pasword    ║\n" +
                 "╚══════════════╩══════════════╩══════════════╝\n" +
                 "\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //clear
+                "Command failed. Because: incorrect number of parameters. Expected 1, but is 0\n"+
+                "Try again\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //clear user
+                "The table 'user' cleared\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //print user
+                "╔═════════════════════════════════════════╗\n" +
+                "║ Table 'user' is empty or does not exist ║\n" +
+                "╚═════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //exit
                 "See you soon!!!\n";
