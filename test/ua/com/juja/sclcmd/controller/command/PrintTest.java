@@ -15,11 +15,8 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Vitaliy Ryvakov on 18.11.2016.
- */
-public class PrintTest {
 
+public class PrintTest {
     private View view;
     private DatabaseManager manager;
     private Command command;
@@ -32,7 +29,12 @@ public class PrintTest {
     }
 
     @Test
-    public void printTableTest(){
+    public void incorrectNumberOfParameters() {
+
+    }
+
+    @Test
+    public void printTableTest() {
         //given
         DataSet user1 = new DataSet();
         user1.put("id", 1);
@@ -57,7 +59,7 @@ public class PrintTest {
     }
 
     @Test
-    public void printTableWithOneColumn(){
+    public void printTableWithOneColumn() {
         //given
         DataSet user1 = new DataSet();
         user1.put("id", 1);
@@ -81,7 +83,7 @@ public class PrintTest {
     }
 
     @Test
-    public void PrintNotExistingTable(){
+    public void PrintNotExistingTable() {
         //given
         Mockito.when(manager.getTableData("test")).thenReturn(new DataSet[0]);
         //when
@@ -93,7 +95,7 @@ public class PrintTest {
     }
 
     @Test
-    public void testCanProcessPrintString(){
+    public void testCanProcessPrintString() {
         //when
         boolean canProcess = command.canProcess("print test");
         //then
@@ -101,11 +103,10 @@ public class PrintTest {
     }
 
     @Test
-    public void testCanProcessQweCommand(){
+    public void testCanProcessQweCommand() {
         //when
         boolean canProcess = command.canProcess("qwe");
         //then
         assertFalse(canProcess);
     }
-
 }

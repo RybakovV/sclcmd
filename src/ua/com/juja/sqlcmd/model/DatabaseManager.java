@@ -1,8 +1,5 @@
 package ua.com.juja.sqlcmd.model;
 
-/**
- * Created by Rybakov Vitaliy on 12.09.2016.
- */
 public interface DatabaseManager {
 
 

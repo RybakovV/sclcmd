@@ -7,13 +7,7 @@ import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.Console;
 import ua.com.juja.sqlcmd.viuw.View;
 
-/**
- * Created by Rybakov Vitaliy on 12.09.2016.
- */
-
-
 public class Main {
-
     private static View view;
     private static DatabaseManager manager;
     private static Command[] commands;
@@ -25,22 +19,21 @@ public class Main {
                 new Help(view),
                 new Exit(view),
                 new IsConnected(view, manager)};
-
         view.write("Hello");
-        try{
+        try {
             while (true) {
                 view.write("Enter command (or command 'help' for help): ");
                 String input = view.read();
-                if (input.equals("connect")){
+                if (input.equals("connect")) {
                     doConnect();
-                }else {
-                    for (Command command: commands) {
+                } else {
+                    for (Command command : commands) {
                         try {
-                            if (command.canProcess(input)){
+                            if (command.canProcess(input)) {
                                 command.process(input);
                                 break;
                             }
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             if (e instanceof ExitException) {
                                 throw e;
                             }
@@ -50,15 +43,14 @@ public class Main {
                     }
                 }
             }
-        }catch (ExitException e){
+        } catch (ExitException e) {
             //do nothing
         }
-
     }
 
     private static void printError(Exception e) {
         String message = e.getMessage();
-        if (e.getCause() != null){
+        if (e.getCause() != null) {
             message += " " + e.getCause().getMessage();
         }
         view.write("Command failed. Because: " + message);
@@ -66,51 +58,55 @@ public class Main {
     }
 
     private static void doConnect() {
-        while (true){
+        int countTry = 0;
+        while (countTry < 3) {
+            countTry++;
             view.write("Enter Database name: ");
             String databaseName = view.read();
             view.write("Enter userName");
             String userName = view.read();
             view.write("Enter password");
             String userPassword = view.read();
-            try{
+            try {
                 manager.connectToDataBase(databaseName, userName, userPassword);
-                if (manager.getVersionDatabase().equals("MySQL")){
+                if (manager.getVersionDatabase().equals("MySQL")) {
                     manager = new MysqlDatabaseManager();
-                    commands = new Command[]{
-                            new Help(view),
-                            new Exit(view),
-                            new List(view, manager),
-                            new Print(view, manager),
-                            new Edit(view, manager),
-                            new Insert(view, manager),
-                            new Clear(view, manager),
-                            new NonExisten(view)};
+                    commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
-                if (manager.getVersionDatabase().equals(("PostgreSQL"))){
+                if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
                     manager = new PostgresqlDatabaseManager();
-                    commands = new Command[]{
-                            new Help(view),
-                            new Exit(view),
-                            new List(view, manager),
-                            new Print(view, manager),
-                            new Edit(view, manager),
-                            new Insert(view, manager),
-                            new NonExisten(view)};
+                    commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
+                view.write("You connected to " + manager.getVersionDatabase() + " database");
                 break;
-            }catch (Exception e){
+            } catch (Exception e) {
                 String message = e.getMessage();
-                if (e.getCause() != null){
+                if (e.getCause() != null) {
                     message += " " + e.getCause().getMessage();
                 }
-                view.write("You do not connected to database. Because: " + message);
-                view.write("Try again");
+                view.write("You can't connect to the database. Because: " + message);
+                if (countTry < 3) {
+                    view.write("Try again");
+                } else {
+                    view.write("Enough try");
+                }
             }
         }
-        view.write("You connected to " + manager.getVersionDatabase() + " database" );
+
+    }
+
+    private static Command[] initializeCommands() {
+        return new Command[]{
+                new Help(view),
+                new Exit(view),
+                new List(view, manager),
+                new Print(view, manager),
+                new Edit(view, manager),
+                new Insert(view, manager),
+                new Clear(view, manager),
+                new NonExisten(view)};
     }
 
 }

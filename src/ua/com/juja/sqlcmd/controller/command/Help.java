@@ -2,14 +2,12 @@ package ua.com.juja.sqlcmd.controller.command;
 
 import ua.com.juja.sqlcmd.viuw.View;
 
-/**
- * Created by Rybakov Vitaliy on 12.09.2016.
- */
 public class Help implements Command {
-
     private View view;
 
-    public Help(View view){ this.view = view; }
+    public Help(View view) {
+        this.view = view;
+    }
 
     @Override
     public boolean canProcess(String command) {
