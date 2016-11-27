@@ -11,6 +11,7 @@ import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -22,7 +23,7 @@ public class IntegrationTest {
 
 
     @Before
-    public void setup() {
+    public void setup() throws SQLException {
         in = new ConfigurableInputStream();
         out = new ByteArrayOutputStream();
 
@@ -502,6 +503,10 @@ public class IntegrationTest {
         in.add("Pasword");
         in.add("print user");
 
+        in.add("clear");
+        in.add("clear user");
+        in.add("y");
+
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -510,7 +515,14 @@ public class IntegrationTest {
         in.add("list");
         in.add("print user");
         in.add("clear");
+        in.add("clear qwe");
+        in.add("т");
+        in.add("Т");
+        in.add("Н");
+        in.add("н");
         in.add("clear user");
+        in.add("н");
+        in.add("y");
         in.add("print user");
 
         in.add("exit");
@@ -724,6 +736,15 @@ public class IntegrationTest {
                 "╚══════════════════════════╩══════════════════════════╩══════════════════════════╝\n" +
                 "\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //clear
+                "Command failed. Because: incorrect number of parameters. Expected 1, but is 0\n" +
+                "Try again\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //clear user
+                "All data will be deleted from the table. Do you really want to do it? (Y/N):\n"+
+                //y
+                "The table 'user' is cleared.\n" +
+                "Enter command (or command 'help' for help): \n" +
                 //connect
                 "Enter Database name: \n" +
                 //mysqlcmd
@@ -753,8 +774,23 @@ public class IntegrationTest {
                 "Command failed. Because: incorrect number of parameters. Expected 1, but is 0\n" +
                 "Try again\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //clear qwe
+                "All data will be deleted from the table. Do you really want to do it? (Y/N):\n"+
+                //т
+                "Enter Y (if yes) or N (if no):\n" +
+                //Т
+                "Enter Y (if yes) or N (if no):\n" +
+                //Н
+                "Enter Y (if yes) or N (if no):\n" +
+                //н
+                "The table 'qwe' is not cleared. Because: Too many attempts\n"+
+                "Enter command (or command 'help' for help): \n" +
                 //clear user
-                "The table 'user' cleared\n" +
+                "All data will be deleted from the table. Do you really want to do it? (Y/N):\n"+
+                //н
+                "Enter Y (if yes) or N (if no):\n" +
+                //y
+                "The table 'user' is cleared.\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print user
                 "╔═════════════════════════════════════════╗\n" +

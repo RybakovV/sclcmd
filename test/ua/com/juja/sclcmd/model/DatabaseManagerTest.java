@@ -5,6 +5,7 @@ import org.junit.Test;
 import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import static junit.framework.TestCase.assertTrue;
@@ -20,7 +21,7 @@ public abstract class DatabaseManagerTest {
     public abstract DatabaseManager getDatabaseManager();
 
    @Before
-    public void sutup(){
+    public void sutup() throws SQLException {
        manager = getDatabaseManager();
 
        String databaseName = manager.getDatabaseName();
@@ -94,7 +95,7 @@ public abstract class DatabaseManagerTest {
     }
 
     @Test
-    public void testClear(){
+    public void testClear() throws SQLException {
         String tableName = "user";
         manager.clear(tableName);
         assertEquals("[]", Arrays.toString(manager.getTableData(tableName)));

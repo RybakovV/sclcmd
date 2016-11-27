@@ -1,5 +1,7 @@
 package ua.com.juja.sqlcmd.model;
 
+import java.sql.SQLException;
+
 public interface DatabaseManager {
 
 
@@ -17,7 +19,7 @@ public interface DatabaseManager {
 
     void insert(String tableName, DataSet data);
 
-    String clear(String tableName);
+    void clear(String tableName) throws SQLException;
 
     String getDatabaseName();
 

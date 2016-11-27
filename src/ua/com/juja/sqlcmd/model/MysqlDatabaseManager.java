@@ -165,14 +165,11 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String clear(String tableName) {
+    public void clear(String tableName) throws SQLException {
         String sql = "DELETE FROM " + tableName;
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
-        } catch (SQLException e) {
-            return "The table '" + tableName + "' does not exist";
         }
-        return "The table '" + tableName + "' cleared";
     }
 
     @Override

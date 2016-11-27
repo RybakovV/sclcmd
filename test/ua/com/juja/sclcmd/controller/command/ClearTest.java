@@ -3,6 +3,7 @@ package ua.com.juja.sclcmd.controller.command;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import ua.com.juja.sqlcmd.controller.command.Clear;
 import ua.com.juja.sqlcmd.controller.command.Command;
@@ -11,6 +12,8 @@ import ua.com.juja.sqlcmd.model.DataSet;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.sqlcmd.viuw.View;
+
+import java.sql.SQLException;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -35,7 +38,7 @@ public class ClearTest {
     }
 
     @Test
-    public void clearTableTest(){
+    public void clearTableTestWithoutParameter(){
         //when
         try {
             command.process("clear");
@@ -47,24 +50,31 @@ public class ClearTest {
     }
 
     @Test
-    public void clearTableTestWithoutParameters(){
+    public void clearTableTest() throws SQLException {
         //given
-        Mockito.when(manager.clear("user")).thenReturn("The table 'user' cleared");
+
         //when
         command.process("clear user");
         //then
-        shouldPrint("[The table 'user' cleared]");
+        Mockito.verify(manager).clear("user");
+        Mockito.verify(view).write("The table 'user' cleared");
     }
 
 
     @Test
     public void clearNotExistingTable(){
+
         //given
-        Mockito.when(manager.clear("notexisting")).thenReturn("Table 'notexisting' does not existing");
-        //when
         command.process("clear notexisting");
         //then
-        shouldPrint("[Table 'notexisting' does not existing]");
+        String expected = "The table 'notexisting' ";
+        try {
+            Mockito.verify(manager).clear("notexisting");
+            expected += "cleared";
+        } catch (SQLException e) {
+            expected += "' not cleared. Because: " + e.getMessage();
+        }
+        Mockito.verify(view).write(expected);
     }
 
     @Test
@@ -83,10 +93,5 @@ public class ClearTest {
         assertFalse(canProcess);
     }
 
-    private void shouldPrint(String expected) {
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        Mockito.verify(view, Mockito.atLeastOnce()).write(captor.capture());
-        assertEquals(expected, captor.getAllValues().toString());
-    }
 
 }

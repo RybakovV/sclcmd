@@ -1,63 +1,29 @@
-package ua.com.juja.sqlcmd.controller;
+package ua.com.juja.sqlcmd.controller.command;
 
-import ua.com.juja.sqlcmd.controller.command.*;
 import ua.com.juja.sqlcmd.model.DatabaseManager;
 import ua.com.juja.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.sqlcmd.model.PostgresqlDatabaseManager;
-import ua.com.juja.sqlcmd.viuw.Console;
 import ua.com.juja.sqlcmd.viuw.View;
 
-public class Main {
-    private static View view;
-    private static DatabaseManager manager;
-    private static Command[] commands;
+import java.sql.SQLException;
 
-    public static void main(String[] args) {
-        view = new Console();
-        manager = new MysqlDatabaseManager();
-        commands = new Command[]{
-                new Help(view),
-                new Exit(view),
-                new IsConnected(view, manager)};
-        view.write("Hello");
-        try {
-            while (true) {
-                view.write("Enter command (or command 'help' for help): ");
-                String input = view.read();
-                if (input.equals("connect")) {
-                    doConnect();
-                } else {
-                    for (Command command : commands) {
-                        try {
-                            if (command.canProcess(input)) {
-                                command.process(input);
-                                break;
-                            }
-                        } catch (Exception e) {
-                            if (e instanceof ExitException) {
-                                throw e;
-                            }
-                            printError(e);
-                            break;
-                        }
-                    }
-                }
-            }
-        } catch (ExitException e) {
-            //do nothing
-        }
+public class Connect implements Command{
+    private final View view;
+    private DatabaseManager manager;
+
+    public Connect(View view, DatabaseManager manager) {
+        this.view = view;
+        this.manager = manager;
     }
 
-    private static void printError(Exception e) {
-        String message = e.getMessage();
-        if (e.getCause() != null) {
-            message += " " + e.getCause().getMessage();
-        }
-        view.write("Command failed. Because: " + message);
-        view.write("Try again");
+
+    @Override
+    public boolean canProcess(String command) {
+        return command.startsWith("connect");
     }
 
-    private static void doConnect() {
+    @Override
+    public void process(String input) {
         int countTry = 0;
         while (countTry < 3) {
             countTry++;
@@ -71,12 +37,12 @@ public class Main {
                 manager.connectToDataBase(databaseName, userName, userPassword);
                 if (manager.getVersionDatabase().equals("MySQL")) {
                     manager = new MysqlDatabaseManager();
-                    commands = initializeCommands();
+                    //commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
                 if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
                     manager = new PostgresqlDatabaseManager();
-                    commands = initializeCommands();
+                    //commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
                 view.write("You connected to " + manager.getVersionDatabase() + " database");
@@ -96,7 +62,7 @@ public class Main {
         }
     }
 
-    private static Command[] initializeCommands() {
+    private Command[] initializeCommands() {
         return new Command[]{
                 new Help(view),
                 new Exit(view),
@@ -109,6 +75,3 @@ public class Main {
     }
 
 }
-
-
-
