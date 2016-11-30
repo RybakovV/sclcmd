@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
  * Created by Vitaliy Ryvakov on 18.11.2016.
  */
 public class ClearTest {
-
     private View view;
     private DatabaseManager manager;
     private Command command;
@@ -34,7 +33,6 @@ public class ClearTest {
         manager = Mockito.mock(DatabaseManager.class);
         view = Mockito.mock(View.class);
         command = new Clear(view, manager);
-
     }
 
     @Test
@@ -51,8 +49,6 @@ public class ClearTest {
 
     @Test
     public void clearTableTest() throws SQLException {
-        //given
-
         //when
         command.process("clear user");
         //then
@@ -63,7 +59,6 @@ public class ClearTest {
 
     @Test
     public void clearNotExistingTable(){
-
         //given
         command.process("clear notexisting");
         //then
@@ -92,6 +87,4 @@ public class ClearTest {
         //then
         assertFalse(canProcess);
     }
-
-
 }

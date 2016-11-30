@@ -16,7 +16,6 @@ import java.sql.SQLException;
 import static junit.framework.TestCase.assertEquals;
 
 public class IntegrationTest {
-
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
     private DatabaseManager manager;
@@ -55,6 +54,48 @@ public class IntegrationTest {
     @Test
     public void testInputNullFail() {
         in.add("");
+    }
+
+    @Test
+    public void testConnect() {
+        in.add("connect");
+        in.add("mysqlcmd");
+        in.add("root");
+        in.add("root");
+
+        in.add("connect");
+        in.add("pgsqlcmd");
+        in.add("postgres");
+        in.add("postgres");
+
+        in.add("exit");
+
+        Main.main(new String[0]);
+        String actual = getData();
+        String expected = "Hello\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //connect
+                "Enter Database name: \n" +
+                //mysqlcmd
+                "Enter userName\n" +
+                //root
+                "Enter password\n" +
+                //root
+                "You connected to MySQL database\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //connect
+                "Enter Database name: \n" +
+                //pgsqlcmd
+                "Enter userName\n" +
+                //postgres
+                "Enter password\n" +
+                //postgres
+                "You connected to PostgreSQL database\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //exit
+                "See you soon!!!\n";
+        assertEquals(expected, actual);
+
     }
 
     @Test
@@ -421,7 +462,7 @@ public class IntegrationTest {
     }
 
     @Test
-    public void testNoTableExit() {
+    public void testPrintNotExistTable() {
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -434,14 +475,19 @@ public class IntegrationTest {
                 "Enter command (or command 'help' for help): \n" +
                 //connect
                 "Enter Database name: \n" +
+                //mysqlcmd
                 "Enter userName\n" +
+                //root
                 "Enter password\n" +
+                //root
                 "You connected to MySQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //print test
                 "╔═════════════════════════════════════════╗\n" +
                 "║ Table 'test' is empty or does not exist ║\n" +
                 "╚═════════════════════════════════════════╝\n" +
                 "Enter command (or command 'help' for help): \n" +
+                //print exit
                 "See you soon!!!\n";
         assertEquals(expected, actusal);
     }
@@ -533,13 +579,13 @@ public class IntegrationTest {
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //cleare
-                "You must connected to database with command 'connected'\n" +
+                "You must connected to database with command 'connect'\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //list
-                "You must connected to database with command 'connected'\n" +
+                "You must connected to database with command 'connect'\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //helps
-                "You must connected to database with command 'connected'\n" +
+                "You must connected to database with command 'connect'\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //help
                 "Possible commands:\n" +

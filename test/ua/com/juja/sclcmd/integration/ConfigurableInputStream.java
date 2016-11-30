@@ -3,9 +3,7 @@ package ua.com.juja.sclcmd.integration;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by Rybakov Vitaliy on 12.09.2016.
- */
+
 public class ConfigurableInputStream extends InputStream{
     private String line;
     private boolean endLine = false;

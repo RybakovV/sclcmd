@@ -20,26 +20,28 @@ public class Main {
                 new Exit(view),
                 new IsConnected(view, manager)};
         view.write("Hello");
+
         try {
             while (true) {
                 view.write("Enter command (or command 'help' for help): ");
                 String input = view.read();
-                if (input.equals("connect")) {
+                if (input.equals("connect")){
                     doConnect();
-                } else {
-                    for (Command command : commands) {
-                        try {
-                            if (command.canProcess(input)) {
-                                command.process(input);
-                                break;
-                            }
-                        } catch (Exception e) {
-                            if (e instanceof ExitException) {
-                                throw e;
-                            }
-                            printError(e);
+                    continue;
+                }
+                //commands = initializeCommands();
+                for (Command command : commands) {
+                    try {
+                        if (command.canProcess(input)) {
+                            command.process(input);
                             break;
                         }
+                    } catch (Exception e) {
+                        if (e instanceof ExitException) {
+                            throw e;
+                        }
+                        printError(e);
+                        break;
                     }
                 }
             }
@@ -100,6 +102,7 @@ public class Main {
         return new Command[]{
                 new Help(view),
                 new Exit(view),
+                //new Connect(view, manager),
                 new List(view, manager),
                 new Print(view, manager),
                 new Edit(view, manager),

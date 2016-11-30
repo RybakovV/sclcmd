@@ -11,81 +11,72 @@ import java.util.Arrays;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by Rybakov Vitaliy on 12.09.2016.
- */
-public abstract class DatabaseManagerTest {
 
+public abstract class DatabaseManagerTest {
     private DatabaseManager manager;
 
     public abstract DatabaseManager getDatabaseManager();
 
-   @Before
+    @Before
     public void sutup() throws SQLException {
-       manager = getDatabaseManager();
+        manager = getDatabaseManager();
 
-       String databaseName = manager.getDatabaseName();
-       String userName = manager.getUserName();
-       String userPassword = manager.getUserPassword();
-       manager.connectToDataBase(databaseName, userName, userPassword);
-       String tableName = "user";
-       manager.clear(tableName);
-       DataSet data = new DataSet();
-       data.put("id", 13);
-       data.put("password", "pswd");
-       data.put("name", "Stivennnn");
-       manager.insert(tableName, data);
+        String databaseName = manager.getDatabaseName();
+        String userName = manager.getUserName();
+        String userPassword = manager.getUserPassword();
+        manager.connectToDataBase(databaseName, userName, userPassword);
 
-       DataSet[] arrayDataSet = new DataSet[]{data};
+        String tableName = "user";
+        manager.clear(tableName);
 
+        DataSet data = new DataSet();
+        data.put("id", 13);
+        data.put("password", "pswd");
+        data.put("name", "Stivennnn");
+        manager.insert(tableName, data);
     }
 
 
     @Test
-    public void testGetColumnCount(){
-        if (manager.getVersionDatabase().equals("PostgreSQL")){
-            assertEquals(0,manager.getColumnCount("empty"));
-            assertEquals(2,manager.getColumnCount("test"));
-
-        }else{
-            assertEquals(1,manager.getColumnCount("empty"));
-            assertEquals(2,manager.getColumnCount("test-sql"));
+    public void testGetColumnCount() {
+        if (manager.getVersionDatabase().equals("PostgreSQL")) {
+            assertEquals(0, manager.getColumnCount("empty"));
+            assertEquals(2, manager.getColumnCount("test"));
+        } else {
+            assertEquals(1, manager.getColumnCount("empty"));
+            assertEquals(2, manager.getColumnCount("test-sql"));
         }
-        assertEquals(3,manager.getColumnCount("user"));
+        assertEquals(3, manager.getColumnCount("user"));
     }
 
     @Test
-    public void testGetMaxColumnSize(){
-        if (manager.getVersionDatabase().equals("PostgreSQL")){
-            assertEquals(0,manager.getColumnCount("empty"));
-
-        }else{
-            assertEquals(1,manager.getColumnCount("empty"));
+    public void testGetMaxColumnSize() {
+        if (manager.getVersionDatabase().equals("PostgreSQL")) {
+            assertEquals(0, manager.getColumnCount("empty"));
+        } else {
+            assertEquals(1, manager.getColumnCount("empty"));
         }
     }
 
     @Test
-    public void testGetAllTablesOfDataBase(){
+    public void testGetAllTablesOfDataBase() {
         String[] tables = manager.getAllTablesOfDataBase();
         Arrays.sort(tables);
-        if (manager.getVersionDatabase().equals("PostgreSQL")){
+        if (manager.getVersionDatabase().equals("PostgreSQL")) {
             assertEquals("[empty, test, user]", Arrays.toString(tables));
-        }else{
+        } else {
             assertEquals("[empty, test-sql, user]", Arrays.toString(tables));
         }
-
-
     }
 
     @Test
-    public void testUpdate(){
+    public void testUpdate() {
         String tableName = "user";
 
         DataSet data = new DataSet();
         data.put("id", 17);
         data.put("name", "testUpdate");
         data.put("password", "pswd-testUpdate");
-
         manager.update(tableName, 13, data);
 
         assertEquals("[DataStr{\n" +
@@ -102,13 +93,13 @@ public abstract class DatabaseManagerTest {
     }
 
     @Test
-    public void testGetColumnNames(){
+    public void testGetColumnNames() {
         String tableName = "user";
         assertEquals("[id, name, password]", Arrays.toString(manager.getColumnNames(tableName)));
     }
 
     @Test
-    public void testIsConnected(){
+    public void testIsConnected() {
         assertTrue(manager.isConnected());
     }
 }
