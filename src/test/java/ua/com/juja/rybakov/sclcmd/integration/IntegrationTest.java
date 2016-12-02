@@ -57,6 +57,57 @@ public class IntegrationTest {
     }
 
     @Test
+    public void testListDatabases() {
+        in.add("connect");
+        in.add("mysqlcmd");
+        in.add("root");
+        in.add("root");
+        in.add("listdb");
+
+        in.add("connect");
+        in.add("pgsqlcmd");
+        in.add("postgres");
+        in.add("postgres");
+        in.add("listdb");
+
+        in.add("exit");
+
+        Main.main(new String[0]);
+        String actual = getData();
+        String expected = "Hello\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //connect
+                "Enter Database name: \n" +
+                //mysqlcmd
+                "Enter userName\n" +
+                //root
+                "Enter password\n" +
+                //root
+                "You connected to MySQL database\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //listdb
+                "[information_schema, kitchenkonstructor, mysql, mysqlcmd, performance_schema, sakila, sys, world]\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //connect
+                "Enter Database name: \n" +
+                //pgsqlcmd
+                "Enter userName\n" +
+                //postgres
+                "Enter password\n" +
+                //postgres
+                "You connected to PostgreSQL database\n" +
+                "Enter command (or command 'help' for help): \n" +
+                //listdb
+                "[pgsqlcmd, postgres, test]\n"+
+                "Enter command (or command 'help' for help): \n" +
+                //exit
+                "See you soon!!!\n";
+        assertEquals(expected, actual);
+
+    }
+
+
+    @Test
     public void testConnect() {
         in.add("connect");
         in.add("mysqlcmd");

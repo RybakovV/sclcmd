@@ -243,4 +243,25 @@ public class MysqlDatabaseManager implements DatabaseManager {
     public boolean isConnected() {
         return connection != null;
     }
+
+    @Override
+    public String[] getAllDataBases() {
+        int countDB = 0;
+        String[] result = new String[100];
+        try (Statement statement = connection.createStatement()) {
+            if (statement != null) {
+                try (ResultSet resultSet = statement.executeQuery("SHOW DATABASES")) {
+                    while (resultSet.next()) {
+                        result[countDB] = resultSet.getString(1);
+                        countDB++;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        result = Arrays.copyOf(result, countDB, String[].class);
+        Arrays.sort(result);
+        return result;
+    }
 }

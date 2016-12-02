@@ -64,7 +64,7 @@ public class Connect implements Command{
         return new Command[]{
                 new Help(view),
                 new Exit(view),
-                new List(view, manager),
+                new ListTables(view, manager),
                 new Print(view, manager),
                 new Edit(view, manager),
                 new Insert(view, manager),

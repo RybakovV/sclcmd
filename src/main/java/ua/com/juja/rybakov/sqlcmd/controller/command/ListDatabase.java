@@ -3,24 +3,27 @@ package ua.com.juja.rybakov.sqlcmd.controller.command;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
-public class IsConnected implements Command {
+import java.util.Arrays;
+
+
+public class ListDatabase implements Command {
     private View view;
     private DatabaseManager manager;
 
-
-    public IsConnected(View view, DatabaseManager manager) {
-        this.view = view;
+    public ListDatabase(View view, DatabaseManager manager) {
         this.manager = manager;
+        this.view = view;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return !manager.isConnected();
+        return command.equals("listdb");
     }
 
     @Override
     public void process(String command) {
-        view.write("You must connected to database with command 'connect'");
-    }
+        String[] dataBases = manager.getAllDataBases();
+        view.write(Arrays.toString(dataBases));
 
+    }
 }

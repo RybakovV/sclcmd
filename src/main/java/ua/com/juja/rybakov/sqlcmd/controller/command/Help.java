@@ -24,6 +24,9 @@ public class Help implements Command {
         view.write("\tlist");
         view.write("\t\tprint all tables of the connected database");
 
+        view.write("\tlistdb");
+        view.write("\t\tprint all databases of the type connected database");
+
         view.write("\tprint tableName");
         view.write("\t\tprint contents of the table 'tableName'");
 

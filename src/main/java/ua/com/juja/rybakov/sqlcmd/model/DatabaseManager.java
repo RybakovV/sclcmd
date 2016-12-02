@@ -9,13 +9,6 @@ public interface DatabaseManager {
 
     String[] getAllTablesOfDataBase();
 
-    /**
-     *
-     * @param database
-     * @param user
-     * @param password
-     */
-
     void connectToDataBase(String database, String user, String password);
 
     void update(String tableName, int id, DataSet data);
@@ -44,5 +37,5 @@ public interface DatabaseManager {
 
     boolean isConnected();
 
-
+    String[] getAllDataBases();
 }
