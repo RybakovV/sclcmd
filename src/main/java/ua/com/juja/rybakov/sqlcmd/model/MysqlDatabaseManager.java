@@ -6,7 +6,7 @@ import java.sql.*;
 import java.util.Arrays;
 
 public class MysqlDatabaseManager implements DatabaseManager {
-
+    private Configuration configuration = new Configuration();
     private Connection connection;
     private String databaseName;
     private String userName;
@@ -82,8 +82,13 @@ public class MysqlDatabaseManager implements DatabaseManager {
             throw new RuntimeException("Please register you JDBC driver", e);
         }
         try {
-            String url = "jdbc:mysql://127.0.0.1:3306/" + database + "?useSSL=false";
+            String url = "jdbc:mysql://" + configuration.getMysqlServer() + ":"
+                    + configuration.getMysqlPort() + "/"
+                    + database + "?useSSL=" + configuration.getMysqlUseSsl();
+//            String url = "jdbc:mysql://db14.freehost.com.ua:3306/" + database + "?useSSL=false";
+
             connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
         } catch (SQLException eSQLException) {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -91,8 +96,9 @@ public class MysqlDatabaseManager implements DatabaseManager {
                 throw new RuntimeException("Please register you JDBC driver", eClassNotFoundPostgres);
             }
             try {
-                String url = "jdbc:postgresql://localhost/" + database;
+                String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
                 connection = DriverManager.getConnection(url, user, password);
+                System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
             } catch (SQLException ePostgresException) {
                 connection = null;
                 throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), ePostgresException);

@@ -44,6 +44,7 @@ public class ClearTest {
         //then
     }
 
+/*
     @Test
     public void clearTableTest() throws SQLException {
         //when
@@ -52,8 +53,10 @@ public class ClearTest {
         Mockito.verify(manager).clear("user");
         Mockito.verify(view).write("The table 'user' cleared");
     }
+*/
 
 
+/*
     @Test
     public void clearNotExistingTable(){
         //given
@@ -68,6 +71,7 @@ public class ClearTest {
         }
         Mockito.verify(view).write(expected);
     }
+*/
 
     @Test
     public void testCanProcessClearString(){

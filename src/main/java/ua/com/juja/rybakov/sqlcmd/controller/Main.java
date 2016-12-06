@@ -75,9 +75,12 @@ public class Main {
                     manager = new MysqlDatabaseManager();
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
-                }
-                if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
+                }else if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
                     manager = new PostgresqlDatabaseManager();
+                    commands = initializeCommands();
+                    manager.connectToDataBase(databaseName, userName, userPassword);
+                }else {
+                    manager = new MysqlDatabaseManager();
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }

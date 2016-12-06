@@ -9,6 +9,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     private String databaseName;
     private String userName;
     private String userPassword;
+    private Configuration configuration = new Configuration();
 
     @Override
     public DataSet[] getTableData(String tableName) {
@@ -73,8 +74,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             throw new RuntimeException("Please register you JDBC driver", e);
         }
         try {
-            String url = "jdbc:postgresql://localhost/" + database;
+            String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
             connection = DriverManager.getConnection(url, user, password);
+            System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
         } catch (SQLException ePostgresConnection) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -82,8 +84,12 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
                 throw new RuntimeException("Please register you JDBC driver", eClassNotFoundMySQL);
             }
             try {
-                String url = "jdbc:mysql://127.0.0.1:3306/" + database + "?useSSL=false";
+                String url = "jdbc:mysql://" + configuration.getMysqlServer() + ":"
+                        + configuration.getMysqlPort() + "/"
+                        + database + "?useSSL=" + configuration.getMysqlUseSsl();
+
                 connection = DriverManager.getConnection(url, user, password);
+                System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
             } catch (SQLException eMySQLException) {
                 connection = null;
                 throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), eMySQLException);
