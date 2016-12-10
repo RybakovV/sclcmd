@@ -76,7 +76,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         try {
             String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
             connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
+
         } catch (SQLException ePostgresConnection) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -89,7 +89,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
                         + database + "?useSSL=" + configuration.getMysqlUseSsl();
 
                 connection = DriverManager.getConnection(url, user, password);
-                System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
+
             } catch (SQLException eMySQLException) {
                 connection = null;
                 throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), eMySQLException);

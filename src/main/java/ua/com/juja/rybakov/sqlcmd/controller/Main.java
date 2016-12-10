@@ -13,6 +13,7 @@ public class Main {
     private static Command[] commands;
 
     public static void main(String[] args) {
+
         view = new Console();
         manager = new MysqlDatabaseManager();
         commands = new Command[]{

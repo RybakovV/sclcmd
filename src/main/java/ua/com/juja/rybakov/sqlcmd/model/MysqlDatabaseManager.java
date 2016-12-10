@@ -12,6 +12,8 @@ public class MysqlDatabaseManager implements DatabaseManager {
     private String userName;
     private String userPassword;
 
+
+
     @Override
     public DataSet[] getTableData(String tableName) {
         int tableSize = getCountRows(tableName);
@@ -85,10 +87,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
             String url = "jdbc:mysql://" + configuration.getMysqlServer() + ":"
                     + configuration.getMysqlPort() + "/"
                     + database + "?useSSL=" + configuration.getMysqlUseSsl();
-//            String url = "jdbc:mysql://db14.freehost.com.ua:3306/" + database + "?useSSL=false";
-
             connection = DriverManager.getConnection(url, user, password);
-            System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
         } catch (SQLException eSQLException) {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -98,7 +97,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
             try {
                 String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
                 connection = DriverManager.getConnection(url, user, password);
-                System.out.println("Connection with url: " + url + ", userName: " +  user + " and password " + password + " successful!!!!!!!!" );
             } catch (SQLException ePostgresException) {
                 connection = null;
                 throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), ePostgresException);

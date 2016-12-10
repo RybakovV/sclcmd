@@ -9,6 +9,7 @@ import ua.com.juja.rybakov.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.PostgresqlDatabaseManager;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -16,6 +17,8 @@ import java.sql.SQLException;
 import static junit.framework.TestCase.assertEquals;
 
 public class IntegrationTest {
+    private static final String SERVICE_NAME_POSTGRES = "PostgreSQL 9.5 Server";
+    private static final String SERVICE_NAME_MYSQL = "MySQL57";
     private ConfigurableInputStream in;
     private ByteArrayOutputStream out;
     private DatabaseManager manager;
@@ -51,7 +54,7 @@ public class IntegrationTest {
         }
     }
 
-    /*@Test
+    @Test
     public void testInputNullFail() {
         in.add("");
     }
@@ -147,9 +150,8 @@ public class IntegrationTest {
                 "See you soon!!!\n";
         assertEquals(expected, actual);
 
-    }*/
+    }
 
-/*
     @Test
     public void testConnectToStoppedDB() {
         in.add("connect");
@@ -180,7 +182,16 @@ public class IntegrationTest {
 
         in.add("exit");
 
+
+        ServiceStartStop.main(new String[]{"stop", SERVICE_NAME_POSTGRES});
+        ServiceStartStop.main(new String[]{"stop", SERVICE_NAME_MYSQL});
+
         Main.main(new String[0]);
+
+        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_POSTGRES});
+        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_MYSQL});
+
+
         String actual = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -243,9 +254,8 @@ public class IntegrationTest {
         assertEquals(expected, actual);
 
     }
-*/
 
-  /*  @Test
+    @Test
     public void testInsert() {
         in.add("connect");
         in.add("mysqlcmd");
@@ -901,7 +911,7 @@ public class IntegrationTest {
                 //exit
                 "See you soon!!!\n";
         assertEquals(expected, actusal);
-    }*/
+    }
 
     private String getData() {
         try {
