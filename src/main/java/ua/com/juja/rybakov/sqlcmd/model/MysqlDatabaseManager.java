@@ -1,9 +1,10 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
-import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
-
 import java.sql.*;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class MysqlDatabaseManager implements DatabaseManager {
     private Configuration configuration = new Configuration();
@@ -56,14 +57,14 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getAllTablesOfDataBase() {
+    public Set<String> getAllTablesOfDataBase() {
         int countTables = 0;
-        String[] tables = new String[100];
+        Set <String> tables = new LinkedHashSet<String>();
         try (Statement statement = connection.createStatement()) {
             if (statement != null) {
                 try (ResultSet resultSet = statement.executeQuery("SHOW TABLES")) {
                     while (resultSet.next()) {
-                        tables[countTables] = resultSet.getString(1);
+                        tables.add(resultSet.getString(1));
                         countTables++;
                     }
                 }
@@ -71,8 +72,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        tables = Arrays.copyOf(tables, countTables, String[].class);
-        Arrays.sort(tables);
         return tables;
     }
 

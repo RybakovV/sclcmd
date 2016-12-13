@@ -1,13 +1,14 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
 import java.sql.SQLException;
+import java.util.Set;
 
 public interface DatabaseManager {
 
 
     DataSet[] getTableData(String tableName);
 
-    String[] getAllTablesOfDataBase();
+    Set<String> getAllTablesOfDataBase();
 
     void connectToDataBase(String database, String user, String password);
 

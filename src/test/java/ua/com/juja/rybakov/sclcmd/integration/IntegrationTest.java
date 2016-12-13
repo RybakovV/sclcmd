@@ -252,7 +252,6 @@ public class IntegrationTest {
                 //exit
                 "See you soon!!!\n";
         assertEquals(expected, actual);
-
     }
 
     @Test
@@ -769,7 +768,7 @@ public class IntegrationTest {
                 "You connected to PostgreSQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //list
-                "[empty, test, user]\n" +
+                "[test, user, empty]\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print USERS
                 "╔══════════════════════════════════════════╗\n" +
