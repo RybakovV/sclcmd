@@ -97,7 +97,7 @@ public abstract class DatabaseManagerTest {
     @Test
     public void testGetColumnNames() {
         String tableName = "user";
-        assertEquals("[id, name, password]", Arrays.toString(manager.getColumnNames(tableName)));
+        assertEquals("[id, name, password]", manager.getColumnNames(tableName).toString());
     }
 
     @Test

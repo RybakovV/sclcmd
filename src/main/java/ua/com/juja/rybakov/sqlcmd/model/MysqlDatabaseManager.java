@@ -133,16 +133,16 @@ public class MysqlDatabaseManager implements DatabaseManager {
 
 
     @Override
-    public String[] getColumnNames(String tableName) {
+    public Set<String> getColumnNames(String tableName) {
         int columnCount = getColumnCount(tableName);
-        String[] columnNames = new String[columnCount];
+        Set<String> columnNames = new LinkedHashSet<>();
         if (columnCount > 0) {
             ResultSetMetaData resultSetMetaData;
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
                 resultSetMetaData = resultSet.getMetaData();
                 for (int i = 0; i < columnCount; i++) {
-                    columnNames[i] = resultSetMetaData.getColumnName(i + 1);
+                    columnNames.add(resultSetMetaData.getColumnName(i + 1));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();

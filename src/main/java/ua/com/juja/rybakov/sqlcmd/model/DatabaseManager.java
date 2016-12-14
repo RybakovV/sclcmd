@@ -17,7 +17,7 @@ public interface DatabaseManager {
 
     int getColumnCount(String tableName);
 
-    String[] getColumnNames(String tableName);
+    Set<String> getColumnNames(String tableName);
 
     void insert(String tableName, DataSet data);
 

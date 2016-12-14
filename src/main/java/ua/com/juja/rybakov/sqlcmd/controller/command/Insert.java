@@ -4,6 +4,8 @@ import ua.com.juja.rybakov.sqlcmd.model.DataSet;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
+import java.util.Set;
+
 public class Insert implements Command {
     private DatabaseManager manager;
     private View view;
@@ -25,8 +27,8 @@ public class Insert implements Command {
             throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
         }
         String tableName = command[1];
-        String[] columnName = manager.getColumnNames(tableName);
-        if (columnName.length > 0) {
+        Set<String> columnName = manager.getColumnNames(tableName);
+        if (columnName.size() > 0) {
             view.write("Enter the data when you want to insert.");
             DataSet insertData = new DataSet();
             for (String aColumnName : columnName) {

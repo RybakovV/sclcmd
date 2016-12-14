@@ -5,6 +5,8 @@ import ua.com.juja.rybakov.sqlcmd.model.DataSet;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
+import java.util.Set;
+
 public class Edit implements Command {
     private View view;
     private DatabaseManager manager;
@@ -26,8 +28,8 @@ public class Edit implements Command {
             throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
         }
         String tableName = command[1];
-        String[] columnName = manager.getColumnNames(tableName);
-        if (columnName.length > 0) {
+        Set<String> columnName = manager.getColumnNames(tableName);
+        if (columnName.size() > 0) {
             view.write("Enter 'id' row when you want to change (edit): ");
             DataSet insertData = new DataSet();
             int dataChange = Integer.parseInt(view.read());
