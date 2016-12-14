@@ -39,5 +39,5 @@ public interface DatabaseManager {
 
     boolean isConnected();
 
-    String[] getAllDataBases();
+    Set<String> getAllDataBases();
 }

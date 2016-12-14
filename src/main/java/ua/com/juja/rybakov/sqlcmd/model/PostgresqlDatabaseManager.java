@@ -233,24 +233,20 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public String[] getAllDataBases() {
-        int countDB = 0;
-        String[] result = new String[100];
+    public Set<String> getAllDataBases() {
+        Set<String> result = new TreeSet<>();
         try (Statement statement = connection.createStatement()) {
             if (statement != null) {
                 try (ResultSet resultSet = statement.executeQuery("SELECT datname FROM pg_database\n" +
                         "WHERE datistemplate = false;")) {
                     while (resultSet.next()) {
-                        result[countDB] = resultSet.getString(1);
-                        countDB++;
+                        result.add(resultSet.getString(1));
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        result = Arrays.copyOf(result, countDB, String[].class);
-        Arrays.sort(result);
         return result;
     }
 }

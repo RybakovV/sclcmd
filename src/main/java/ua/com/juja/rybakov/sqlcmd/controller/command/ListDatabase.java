@@ -4,6 +4,7 @@ import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.Arrays;
+import java.util.Set;
 
 
 public class ListDatabase implements Command {
@@ -22,8 +23,8 @@ public class ListDatabase implements Command {
 
     @Override
     public void process(String command) {
-        String[] dataBases = manager.getAllDataBases();
-        view.write(Arrays.toString(dataBases));
+        Set<String> dataBases = manager.getAllDataBases();
+        view.write(dataBases.toString());
 
     }
 }
