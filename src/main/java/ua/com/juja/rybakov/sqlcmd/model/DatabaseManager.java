@@ -1,6 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 public interface DatabaseManager {
@@ -8,7 +9,7 @@ public interface DatabaseManager {
 
     DataSet[] getTableData(String tableName);
 
-    Set<String> getAllTablesOfDataBase();
+    List<String> getAllTablesOfDataBase();
 
     void connectToDataBase(String database, String user, String password);
 

@@ -768,7 +768,7 @@ public class IntegrationTest {
                 "You connected to PostgreSQL database\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //list
-                "[test, user, empty]\n" +
+                "[empty, test, user]\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print USERS
                 "╔══════════════════════════════════════════╗\n" +

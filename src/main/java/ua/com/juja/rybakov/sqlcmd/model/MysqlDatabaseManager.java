@@ -1,10 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 public class MysqlDatabaseManager implements DatabaseManager {
     private Configuration configuration = new Configuration();
@@ -57,9 +54,9 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public Set<String> getAllTablesOfDataBase() {
+    public List<String> getAllTablesOfDataBase() {
         int countTables = 0;
-        Set <String> tables = new LinkedHashSet<String>();
+        List<String> tables = new ArrayList<>();
         try (Statement statement = connection.createStatement()) {
             if (statement != null) {
                 try (ResultSet resultSet = statement.executeQuery("SHOW TABLES")) {
@@ -72,6 +69,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Collections.sort(tables);
         return tables;
     }
 

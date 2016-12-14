@@ -7,6 +7,7 @@ import ua.com.juja.rybakov.sqlcmd.model.DataSet;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
@@ -61,10 +62,10 @@ public abstract class DatabaseManagerTest {
 
     @Test
     public void testGetAllTablesOfDataBase() {
-        Set<String> tables = manager.getAllTablesOfDataBase();
+        List<String> tables = manager.getAllTablesOfDataBase();
 
         if (manager.getVersionDatabase().equals("PostgreSQL")) {
-            assertEquals("[test, user, empty]", tables.toString());
+            assertEquals("[empty, test, user]", tables.toString());
         } else {
             assertEquals("[empty, test-sql, user]", tables.toString());
         }

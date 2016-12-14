@@ -1,9 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
 import java.sql.*;
-import java.util.Arrays;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 
 public class PostgresqlDatabaseManager implements DatabaseManager {
@@ -51,9 +49,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public Set<String> getAllTablesOfDataBase() {
+    public List<String> getAllTablesOfDataBase() {
         int countTables = 0;
-        Set <String> tables = new LinkedHashSet<String>();
+        List <String> tables = new ArrayList<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public'")) {
             while (resultSet.next()) {
@@ -63,6 +61,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        Collections.sort(tables);
         return tables;
     }
 
