@@ -9,7 +9,7 @@ public interface DatabaseManager {
 
     DataSet[] getTableData(String tableName);
 
-    List<String> getAllTablesOfDataBase();
+    Set<String> getAllTablesOfDataBase();
 
     void connectToDataBase(String database, String user, String password);
 

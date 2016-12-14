@@ -54,22 +54,21 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public List<String> getAllTablesOfDataBase() {
-        int countTables = 0;
-        List<String> tables = new ArrayList<>();
+    public Set<String> getAllTablesOfDataBase() {
+
+        Set<String> tables = new TreeSet<>();
         try (Statement statement = connection.createStatement()) {
             if (statement != null) {
                 try (ResultSet resultSet = statement.executeQuery("SHOW TABLES")) {
                     while (resultSet.next()) {
                         tables.add(resultSet.getString(1));
-                        countTables++;
                     }
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Collections.sort(tables);
+        //Collections.sort(tables);
         return tables;
     }
 

@@ -24,7 +24,7 @@ public class ListTables implements Command {
 
     @Override
     public void process(String command) {
-        List<String> tables = manager.getAllTablesOfDataBase();
+        Set<String> tables = manager.getAllTablesOfDataBase();
         view.write(tables.toString());
     }
 

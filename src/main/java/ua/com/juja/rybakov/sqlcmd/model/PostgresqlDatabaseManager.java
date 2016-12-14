@@ -49,19 +49,16 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public List<String> getAllTablesOfDataBase() {
-        int countTables = 0;
-        List <String> tables = new ArrayList<>();
+    public Set<String> getAllTablesOfDataBase() {
+        Set <String> tables = new TreeSet<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public'")) {
             while (resultSet.next()) {
                 tables.add(resultSet.getString("table_name"));
-                countTables++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        Collections.sort(tables);
         return tables;
     }
 

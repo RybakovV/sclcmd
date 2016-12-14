@@ -62,7 +62,7 @@ public abstract class DatabaseManagerTest {
 
     @Test
     public void testGetAllTablesOfDataBase() {
-        List<String> tables = manager.getAllTablesOfDataBase();
+        Set<String> tables = manager.getAllTablesOfDataBase();
 
         if (manager.getVersionDatabase().equals("PostgreSQL")) {
             assertEquals("[empty, test, user]", tables.toString());
