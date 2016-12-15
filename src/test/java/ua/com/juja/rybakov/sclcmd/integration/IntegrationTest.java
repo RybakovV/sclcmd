@@ -3,13 +3,9 @@ package ua.com.juja.rybakov.sclcmd.integration;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.rybakov.sqlcmd.controller.Main;
-import ua.com.juja.rybakov.sqlcmd.model.DataSet;
-import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
-import ua.com.juja.rybakov.sqlcmd.model.MysqlDatabaseManager;
-import ua.com.juja.rybakov.sqlcmd.model.PostgresqlDatabaseManager;
+import ua.com.juja.rybakov.sqlcmd.model.*;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
@@ -33,7 +29,7 @@ public class IntegrationTest {
         System.setOut(new PrintStream(out));
 
         String tableName = "user";
-        DataSet data = new DataSet();
+        DataSet data = new DataSetImpl();
         data.put("id", 13);
         data.put("password", "pswd");
         data.put("name", "Pupkin");

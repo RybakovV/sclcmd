@@ -8,6 +8,7 @@ import org.mockito.Mockito;
 import ua.com.juja.rybakov.sqlcmd.controller.command.Command;
 import ua.com.juja.rybakov.sqlcmd.controller.command.Print;
 import ua.com.juja.rybakov.sqlcmd.model.DataSet;
+import ua.com.juja.rybakov.sqlcmd.model.DataSetImpl;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
@@ -40,11 +41,11 @@ public class PrintTest {
     @Test
     public void printTableTest() {
         //given
-        DataSet user1 = new DataSet();
+        DataSet user1 = new DataSetImpl();
         user1.put("id", 1);
         user1.put("name", "Stiven Pupkin");
         user1.put("password", "123456");
-        DataSet user2 = new DataSet();
+        DataSet user2 = new DataSetImpl();
         user2.put("id", 2);
         user2.put("name", "Eva Pupkina");
         user2.put("password", "789456");
@@ -67,7 +68,7 @@ public class PrintTest {
     @Test
     public void printTableWithOneColumn() {
         //given
-        DataSet user1 = new DataSet();
+        DataSet user1 = new DataSetImpl();
         user1.put("id", 1);
         List<DataSet> dataSets = new LinkedList<>();
         dataSets.add(user1);

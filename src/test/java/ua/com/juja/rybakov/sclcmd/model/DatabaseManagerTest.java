@@ -2,12 +2,11 @@ package ua.com.juja.rybakov.sclcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.rybakov.sqlcmd.model.DataSetImpl;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.DataSet;
 
 import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import static junit.framework.TestCase.assertTrue;
@@ -31,7 +30,7 @@ public abstract class DatabaseManagerTest {
         String tableName = "user";
         manager.clear(tableName);
 
-        DataSet data = new DataSet();
+        DataSet data = new DataSetImpl();
         data.put("id", 13);
         data.put("password", "pswd");
         data.put("name", "Stivennnn");
@@ -75,7 +74,7 @@ public abstract class DatabaseManagerTest {
     public void testUpdate() {
         String tableName = "user";
 
-        DataSet data = new DataSet();
+        DataSet data = new DataSetImpl();
         data.put("id", 17);
         data.put("name", "testUpdate");
         data.put("password", "pswd-testUpdate");

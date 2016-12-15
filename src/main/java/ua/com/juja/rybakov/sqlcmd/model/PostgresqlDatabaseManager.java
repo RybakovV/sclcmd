@@ -21,7 +21,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
                 int columnCount = getColumnCount(tableName);
                 while (resultSet.next()) {
-                    DataSet dataSet = new DataSet();
+                    DataSet dataSet = new DataSetImpl();
                     for (int i = 1; i <= columnCount; i++) {
                         dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
                     }

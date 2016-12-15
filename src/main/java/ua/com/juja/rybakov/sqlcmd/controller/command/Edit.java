@@ -2,6 +2,7 @@ package ua.com.juja.rybakov.sqlcmd.controller.command;
 
 
 import ua.com.juja.rybakov.sqlcmd.model.DataSet;
+import ua.com.juja.rybakov.sqlcmd.model.DataSetImpl;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
@@ -31,7 +32,7 @@ public class Edit implements Command {
         Set<String> columnName = manager.getColumnNames(tableName);
         if (columnName.size() > 0) {
             view.write("Enter 'id' row when you want to change (edit): ");
-            DataSet insertData = new DataSet();
+            DataSet insertData = new DataSetImpl();
             int dataChange = Integer.parseInt(view.read());
             for (String aColumnName : columnName) {
                 view.write("Input new " + aColumnName + ":");

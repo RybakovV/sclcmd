@@ -1,6 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.controller.command;
 
 import ua.com.juja.rybakov.sqlcmd.model.DataSet;
+import ua.com.juja.rybakov.sqlcmd.model.DataSetImpl;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
@@ -30,7 +31,7 @@ public class Insert implements Command {
         Set<String> columnName = manager.getColumnNames(tableName);
         if (columnName.size() > 0) {
             view.write("Enter the data when you want to insert.");
-            DataSet insertData = new DataSet();
+            DataSet insertData = new DataSetImpl();
             for (String aColumnName : columnName) {
                 view.write("Input " + aColumnName + ":");
                 Object value = view.read();
