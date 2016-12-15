@@ -12,6 +12,9 @@ import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 
+import java.util.LinkedList;
+import java.util.List;
+
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -45,7 +48,9 @@ public class PrintTest {
         user2.put("id", 2);
         user2.put("name", "Eva Pupkina");
         user2.put("password", "789456");
-        DataSet[] dataSets = new DataSet[]{user1, user2};
+        List<DataSet> dataSets = new LinkedList<>();
+        dataSets.add(user1);
+        dataSets.add(user2);
         Mockito.when(manager.getTableData("users")).thenReturn(dataSets);
         //when
         command.process("print users");
@@ -64,7 +69,8 @@ public class PrintTest {
         //given
         DataSet user1 = new DataSet();
         user1.put("id", 1);
-        DataSet[] dataSets = new DataSet[]{user1};
+        List<DataSet> dataSets = new LinkedList<>();
+        dataSets.add(user1);
         Mockito.when(manager.getTableData("test")).thenReturn(dataSets);
         //when
         command.process("print test");
@@ -86,7 +92,7 @@ public class PrintTest {
     @Test
     public void PrintNotExistingTable() {
         //given
-        Mockito.when(manager.getTableData("test")).thenReturn(new DataSet[0]);
+        Mockito.when(manager.getTableData("test")).thenReturn(new LinkedList<DataSet>());
         //when
         command.process("print test");
         //then

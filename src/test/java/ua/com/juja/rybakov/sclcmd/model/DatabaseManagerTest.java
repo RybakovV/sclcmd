@@ -84,14 +84,14 @@ public abstract class DatabaseManagerTest {
         assertEquals("[DataStr{\n" +
                 "columnNames: [id, name, password]\n" +
                 "value: [17, testUpdate, pswd-testUpdate]\n" +
-                "}]", Arrays.toString(manager.getTableData(tableName)));
+                "}]", manager.getTableData(tableName).toString());
     }
 
     @Test
     public void testClear() throws SQLException {
         String tableName = "user";
         manager.clear(tableName);
-        assertEquals("[]", Arrays.toString(manager.getTableData(tableName)));
+        assertEquals("[]", manager.getTableData(tableName).toString());
     }
 
     @Test

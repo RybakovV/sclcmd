@@ -1,6 +1,6 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
-import java.util.Arrays;
+import java.util.*;
 
 /**
  * Created by Rybakov Vitaliy on 12.09.2016.
@@ -27,35 +27,32 @@ public class DataSet {
         }
     }
 
-    Data data[] = new Data[100]; //TODO bad magic number
-
-    public int index = 0;
+    List<Data> data = new LinkedList<>(); //TODO bad magic number
 
     public void put(String columnName, Object value) {
-        data[index] = new Data(columnName, value);
-        index++;
+        data.add(new Data(columnName, value));
     }
 
-    public String[] getColumnNames(){
-        String[] result = new String[index];
-        for (int i = 0; i < index; i++) {
-            result[i] = data[i].getColumnName();
+    public List<String> getColumnNames(){
+        List<String> result = new LinkedList<>();
+        for (Data d : data) {
+            result.add(d.getColumnName()) ;
         }
         return result;
     }
 
-    public Object[] getValues(){
-        Object[] result = new Object[index];
-        for (int i = 0; i < index; i++) {
-            result[i]=data[i].getValue();
+    public List<Object> getValues(){
+        List<Object> result = new LinkedList<>();
+        for (Data d : data) {
+            result.add(d.getValue());
         }
         return result;
     }
 
     public String getValuesString(){
         String result = "";
-        for (int i = 0; i < getValues().length; i++) {
-            Object obj = getValues()[i];
+        for (int i = 0; i < getValues().size(); i++) {
+            Object obj = getValues().get(i);
             if (obj instanceof String){
                 result += "'" + obj + "'";
             }else {
@@ -70,8 +67,8 @@ public class DataSet {
     @Override
     public String toString(){
         return "DataStr{\n" +
-            "columnNames: " + Arrays.toString(getColumnNames()) + "\n" +
-            "value: " + Arrays.toString((getValues())) +"\n" + "}";
+            "columnNames: " + getColumnNames().toString() + "\n" +
+            "value: " + getValues().toString() +"\n" + "}";
     }
 
 }

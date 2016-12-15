@@ -12,22 +12,20 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     private Configuration configuration = new Configuration();
 
     @Override
-    public DataSet[] getTableData(String tableName) {
+    public List<DataSet> getTableData(String tableName) {
         int tableSize = getCountRows(tableName);
-        DataSet[] result = new DataSet[tableSize];
+        List<DataSet> result = new LinkedList<>();
         if (tableSize > 0) {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM public." + tableName)) {
                 ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-                int index = 0;
                 int columnCount = getColumnCount(tableName);
                 while (resultSet.next()) {
                     DataSet dataSet = new DataSet();
                     for (int i = 1; i <= columnCount; i++) {
                         dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
                     }
-                    result[index] = dataSet;
-                    index++;
+                    result.add(dataSet);
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -96,7 +94,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     @Override
     public void update(String tableName, int id, DataSet data) {
         try (Statement statement = connection.createStatement()) {
-            String columnNameSet = Arrays.toString(data.getColumnNames());
+            String columnNameSet = data.getColumnNames().toString();
             columnNameSet = columnNameSet.substring(1, columnNameSet.length() - 1);
             String valueSet = data.getValuesString();
             String sql = "UPDATE public." + tableName + " SET (" + columnNameSet + ") = (" + valueSet + ") WHERE id = " + id;
@@ -143,7 +141,7 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     public void insert(String tableName, DataSet data) {
         try (Statement statement = connection.createStatement()) {
             String valueSet = data.getValuesString();
-            String columnNameSet = Arrays.toString(data.getColumnNames());
+            String columnNameSet = data.getColumnNames().toString();
             columnNameSet = columnNameSet.substring(1, columnNameSet.length() - 1);
             String sql = "INSERT INTO public." + tableName + "(" + columnNameSet + ") VALUES (" + valueSet + ")";
             statement.executeUpdate(sql);

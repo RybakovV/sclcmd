@@ -7,7 +7,7 @@ import java.util.Set;
 public interface DatabaseManager {
 
 
-    DataSet[] getTableData(String tableName);
+    List<DataSet> getTableData(String tableName);
 
     Set<String> getAllTablesOfDataBase();
 

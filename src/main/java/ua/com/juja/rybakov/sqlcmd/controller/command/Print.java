@@ -4,6 +4,8 @@ import ua.com.juja.rybakov.sqlcmd.model.DataSet;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
+import java.util.List;
+
 
 public class Print implements Command {
 
@@ -28,11 +30,11 @@ public class Print implements Command {
             throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
         }
         tableName = command[1];
-        DataSet[] data = manager.getTableData(tableName);
+        List<DataSet> data = manager.getTableData(tableName);
         view.write(getTableString(data));
     }
 
-    private String getTableString(DataSet[] data) {
+    private String getTableString(List<DataSet> data) {
         int maxColumnSize;
         maxColumnSize = getMaxColumnSize(data);
         if (maxColumnSize == 0) {
@@ -58,17 +60,17 @@ public class Print implements Command {
         return result;
     }
 
-    private int getMaxColumnSize(DataSet[] dataSets) {
+    private int getMaxColumnSize(List<DataSet> dataSets) {
         int maxLength = 0;
-        if (dataSets.length > 0) {
-            String[] columnNames = dataSets[0].getColumnNames();
+        if (dataSets.size() > 0) {
+            List<String> columnNames = dataSets.get(0).getColumnNames();
             for (String columnName : columnNames) {
                 if (columnName.length() > maxLength) {
                     maxLength = columnName.length();
                 }
             }
             for (DataSet dataSet : dataSets) {
-                Object[] values = dataSet.getValues();
+                List<Object> values = dataSet.getValues();
                 for (Object value : values) {
                     if (value instanceof String) {
                         if (String.valueOf(value).length() > maxLength) {
@@ -81,9 +83,9 @@ public class Print implements Command {
         return maxLength;
     }
 
-    private String getStringTableData(DataSet[] dataSets) {
+    private String getStringTableData(List<DataSet> dataSets) {
         int rowsCount;
-        rowsCount = dataSets.length;
+        rowsCount = dataSets.size();
         int maxColumnSize = getMaxColumnSize(dataSets);
         String result = "";
         if (maxColumnSize % 2 == 0) {
@@ -93,15 +95,15 @@ public class Print implements Command {
         }
         int columnCount = getColumnCount(dataSets);
         for (int row = 0; row < rowsCount; row++) {
-            Object[] values = dataSets[row].getValues();
+            List<Object> values = dataSets.get(row).getValues();
             result += "║";
             for (int column = 0; column < columnCount; column++) {
-                int valuesLength = String.valueOf(values[column]).length();
+                int valuesLength = String.valueOf(values.get(column)).length();
                 if (valuesLength % 2 == 0) {
                     for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
                         result += " ";
                     }
-                    result += String.valueOf(values[column]);
+                    result += String.valueOf(values.get(column));
                     for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
                         result += " ";
                     }
@@ -110,7 +112,7 @@ public class Print implements Command {
                     for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
                         result += " ";
                     }
-                    result += String.valueOf(values[column]);
+                    result += String.valueOf(values.get(column));
                     for (int j = 0; j <= (maxColumnSize - valuesLength) / 2; j++) {
                         result += " ";
                     }
@@ -146,15 +148,15 @@ public class Print implements Command {
         return result;
     }
 
-    private int getColumnCount(DataSet[] dataSets) {
+    private int getColumnCount(List<DataSet> dataSets) {
         int result = 0;
-        if (dataSets.length > 0) {
-            return dataSets[0].getColumnNames().length;
+        if (dataSets.size() > 0) {
+            return dataSets.get(0).getColumnNames().size();
         }
         return result;
     }
 
-    private String getHeaderOfTheTable(DataSet[] dataSets) {
+    private String getHeaderOfTheTable(List<DataSet> dataSets) {
         int maxColumnSize = getMaxColumnSize(dataSets);
         String result = "";
         int columnCount = getColumnCount(dataSets);
@@ -174,15 +176,15 @@ public class Print implements Command {
             result += "═";
         }
         result += "╗\n";
-        String[] columnNames = dataSets[0].getColumnNames();
+        List<String> columnNames = dataSets.get(0).getColumnNames();
         for (int column = 0; column < columnCount; column++) {
             result += "║";
-            int columnNamesLength = columnNames[column].length();
+            int columnNamesLength = columnNames.get(column).length();
             if (columnNamesLength % 2 == 0) {
                 for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
                     result += " ";
                 }
-                result += columnNames[column];
+                result += columnNames.get(column);
                 for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
                     result += " ";
                 }
@@ -190,7 +192,7 @@ public class Print implements Command {
                 for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
                     result += " ";
                 }
-                result += columnNames[column];
+                result += columnNames.get(column);
                 for (int j = 0; j <= (maxColumnSize - columnNamesLength) / 2; j++) {
                     result += " ";
                 }
@@ -199,7 +201,7 @@ public class Print implements Command {
         result += "║\n";
 
         //last string of the header
-        if (dataSets.length > 0) {
+        if (dataSets.size() > 0) {
             result += "╠";
             for (int j = 1; j < columnCount; j++) {
                 for (int i = 0; i < maxColumnSize; i++) {
