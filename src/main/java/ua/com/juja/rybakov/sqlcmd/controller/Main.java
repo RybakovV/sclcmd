@@ -81,7 +81,8 @@ public class Main {
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }else {
-                    manager = new MysqlDatabaseManager();
+                    manager = new MysqlDatabaseManager(); //TODO Костиль, если не удалось опрееделить
+                                                          //TODO тип БД, то считаем, что это MySQL
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
@@ -106,7 +107,14 @@ public class Main {
         return new Command[]{
                 new Help(view),
                 new Exit(view),
-                //new Connect(view, manager),
+                //new Connect(view, manager), //TODO реализовать комаду connect, как другие комнады
+//TODO          // на даный момент команда реализована в Main - классе. Я понимаю, что єто плохо но не
+//TODO          // могу додуматься, как реализовать по другому. Точнее реализовать знаю, как, но как реализовать,
+//TODO          // так, чтобы заработало, не знаю. Проблема в том, что в Main я определяю
+//TODO          // менеджера БД (mySQL или PostgreQL) manager = new MysqlDatabaseManager();
+//TODO          // в методе doConnect я переопределю при необходимости менеджера manager = new PostgresqlDatabaseManager();
+//TODO          // но из внешенего класса, я не могу этого сделать
+
                 new ListDatabase(view, manager),
                 new ListTables(view, manager),
                 new Print(view, manager),

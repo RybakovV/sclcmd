@@ -27,7 +27,7 @@ public class DataSetImpl implements DataSet {
         }
     }
 
-    List<Data> data = new LinkedList<>(); //TODO bad magic number
+    List<Data> data = new LinkedList<>();
 
     @Override
     public void put(String columnName, Object value) {
