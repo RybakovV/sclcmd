@@ -11,7 +11,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
     private String userPassword;
 
 
-
     @Override
     public List<DataSet> getTableData(String tableName) {
         int tableSize = getCountRows(tableName);
@@ -46,7 +45,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
             resultSet.next();
             countRows = resultSet.getInt(1);
         } catch (SQLException e) {
-            //do nothing
+            e.printStackTrace();
         }
         return countRows;
     }
@@ -66,7 +65,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        //Collections.sort(tables);
         return tables;
     }
 
@@ -82,18 +80,18 @@ public class MysqlDatabaseManager implements DatabaseManager {
                     + configuration.getMysqlPort() + "/"
                     + database + "?useSSL=" + configuration.getMysqlUseSsl();
             connection = DriverManager.getConnection(url, user, password);
-        } catch (SQLException eSQLException) {
+        } catch (SQLException e1) {
             try {
                 Class.forName("org.postgresql.Driver");
-            } catch (ClassNotFoundException eClassNotFoundPostgres) {
-                throw new RuntimeException("Please register you JDBC driver", eClassNotFoundPostgres);
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException("Please register you JDBC driver", e);
             }
             try {
-                String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
+                String url = "jdbc:postgresql://" + configuration.getPostgreSqlServer() + "/" + database;
                 connection = DriverManager.getConnection(url, user, password);
-            } catch (SQLException ePostgresException) {
+            } catch (SQLException e) {
                 connection = null;
-                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), ePostgresException);
+                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), e);
             }
         }
     }
@@ -118,11 +116,11 @@ public class MysqlDatabaseManager implements DatabaseManager {
     @Override
     public int getColumnCount(String tableName) {
         int columnCount = 0;
-        ResultSetMetaData resultSetMetaData;
+        ResultSetMetaData metaData;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM `" + tableName + "`")) {
-            resultSetMetaData = resultSet.getMetaData();
-            columnCount = resultSetMetaData.getColumnCount();
+            metaData = resultSet.getMetaData();
+            columnCount = metaData.getColumnCount();
         } catch (SQLException e) {
             return columnCount;
         }
@@ -135,12 +133,12 @@ public class MysqlDatabaseManager implements DatabaseManager {
         int columnCount = getColumnCount(tableName);
         Set<String> columnNames = new LinkedHashSet<>();
         if (columnCount > 0) {
-            ResultSetMetaData resultSetMetaData;
+            ResultSetMetaData metaData;
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
-                resultSetMetaData = resultSet.getMetaData();
+                metaData = resultSet.getMetaData();
                 for (int i = 0; i < columnCount; i++) {
-                    columnNames.add(resultSetMetaData.getColumnName(i + 1));
+                    columnNames.add(metaData.getColumnName(i + 1));
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -153,9 +151,9 @@ public class MysqlDatabaseManager implements DatabaseManager {
     public void insert(String tableName, DataSet data) {
         try (Statement statement = connection.createStatement()) {
             String valueSet = data.getValuesString();
-            String columnNameSet = data.getColumnNames().toString();
-            columnNameSet = columnNameSet.substring(1, columnNameSet.length() - 1);
-            String sql = "INSERT INTO " + tableName + " (" + columnNameSet + ") VALUES (" + valueSet + ")";
+            String columnNames = data.getColumnNames().toString();
+            columnNames = columnNames.substring(1, columnNames.length() - 1);
+            String sql = "INSERT INTO " + tableName + " (" + columnNames + ") VALUES (" + valueSet + ")";
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException("", e);

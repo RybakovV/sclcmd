@@ -2,10 +2,10 @@ package ua.com.juja.rybakov.sqlcmd.controller.command;
 
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.MysqlDatabaseManager;
-import ua.com.juja.rybakov.sqlcmd.model.PostgresqlDatabaseManager;
+import ua.com.juja.rybakov.sqlcmd.model.PostgreSqlDatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
-public class Connect implements Command{
+public class Connect implements Command {
     private final View view;
     private DatabaseManager manager;
 
@@ -39,7 +39,7 @@ public class Connect implements Command{
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
                 if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
-                    manager = new PostgresqlDatabaseManager();
+                    manager = new PostgreSqlDatabaseManager();
                     //commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }

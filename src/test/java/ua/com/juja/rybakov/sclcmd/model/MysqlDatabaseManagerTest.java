@@ -10,11 +10,11 @@ public class MysqlDatabaseManagerTest extends DatabaseManagerTest {
 
     @Override
     public DatabaseManager getDatabaseManager() {
-        DatabaseManager mysqlDatabaseManager = new MysqlDatabaseManager();
-        mysqlDatabaseManager.setDatabaseName("mysqlcmd");
-        mysqlDatabaseManager.setUserName("root");
-        mysqlDatabaseManager.setUserPassword("root");
-        return mysqlDatabaseManager;
+        DatabaseManager manager = new MysqlDatabaseManager();
+        manager.setDatabaseName("mysqlcmd");
+        manager.setUserName("root");
+        manager.setUserPassword("root");
+        return manager;
     }
 
 }

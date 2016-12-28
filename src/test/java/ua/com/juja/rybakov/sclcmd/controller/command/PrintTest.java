@@ -13,6 +13,7 @@ import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -41,20 +42,14 @@ public class PrintTest {
     @Test
     public void printTableTest() {
         //given
-        DataSet user1 = new DataSetImpl();
-        user1.put("id", 1);
-        user1.put("name", "Stiven Pupkin");
-        user1.put("password", "123456");
-        DataSet user2 = new DataSetImpl();
-        user2.put("id", 2);
-        user2.put("name", "Eva Pupkina");
-        user2.put("password", "789456");
-        List<DataSet> dataSets = new LinkedList<>();
-        dataSets.add(user1);
-        dataSets.add(user2);
-        Mockito.when(manager.getTableData("users")).thenReturn(dataSets);
+
+        setupTable("users",
+                user(1, "Stiven Pupkin", "123456"),
+                user(2, "Eva Pupkina", "789456"));
+
         //when
         command.process("print users");
+
         //then
         shouldPrint("[╔════════════════╦════════════════╦════════════════╗\n" +
                      "║       id       ║      name      ║    password    ║\n" +
@@ -65,14 +60,26 @@ public class PrintTest {
                      "╚════════════════╩════════════════╩════════════════╝\n" + "]");
     }
 
+    private void setupTable(String tableName, DataSet... users) {
+        List<DataSet> dataSets = new LinkedList<>();
+        dataSets.addAll(Arrays.asList(users));
+        Mockito.when(manager.getTableData(tableName)).thenReturn(dataSets);
+    }
+
+    private DataSet user(int id, String name, String password) {
+        DataSet user = putId(id);
+        user.put("name", name);
+        user.put("password", password);
+        return user;
+    }
+
     @Test
     public void printTableWithOneColumn() {
         //given
-        DataSet user1 = new DataSetImpl();
-        user1.put("id", 1);
-        List<DataSet> dataSets = new LinkedList<>();
-        dataSets.add(user1);
-        Mockito.when(manager.getTableData("test")).thenReturn(dataSets);
+        DataSet id = putId(1);
+
+        setupTable("test", id);
+
         //when
         command.process("print test");
         //then
@@ -81,6 +88,12 @@ public class PrintTest {
                      "╠════╣\n" +
                      "║ 1  ║\n" +
                      "╚════╝\n" + "]");
+    }
+
+    private DataSet putId(int value) {
+        DataSet user1 = new DataSetImpl();
+        user1.put("id", value);
+        return user1;
     }
 
 

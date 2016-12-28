@@ -12,10 +12,10 @@ class ServiceStartStop {
     public static void main(String args[]) {
         String[] script = {"sc", args[0], args[1]};
         try {
-            Process process = new ProcessBuilder(script).start();
+            new ProcessBuilder(script).start();
             Thread.sleep(1000);
-        } catch(Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
     }

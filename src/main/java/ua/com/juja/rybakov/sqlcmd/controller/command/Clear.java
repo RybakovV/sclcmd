@@ -5,7 +5,7 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.sql.SQLException; //TODO Потрібно віддати клієнту
 
-public class Clear implements Command{
+public class Clear implements Command {
     private final View view;
     private final DatabaseManager manager;
 
@@ -23,22 +23,22 @@ public class Clear implements Command{
     @Override
     public void process(String input) {
         String[] command = input.split(" ");
-        if (command.length != 2){
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length-1));
+        if (command.length != 2) {
+            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
         }
         String tableName = command[1];
-        String message= "The table '" + tableName + "' is cleared.";
+        String message = "The table '" + tableName + "' is cleared.";
         try {
             view.write("All data will be deleted from the table. Do you really want to do it? (Y/N):");
             String answer = view.read();
             //TODO TryCount
             int tryCount = 0;
-            while (tryCount<3){
+            while (tryCount < 3) {
                 tryCount++;
-                if (answer.equals("y")|answer.equals("Y")) {
+                if (answer.equals("y") | answer.equals("Y")) {
                     manager.clear(tableName);
                     break;
-                }else if (answer.equals("n")|answer.equals("N")){
+                } else if (answer.equals("n") | answer.equals("N")) {
                     message = "The table is not cleared";
                     break;
                 } else {
@@ -46,7 +46,7 @@ public class Clear implements Command{
                     answer = view.read();
                 }
             }
-            if (tryCount==3) {
+            if (tryCount == 3) {
                 throw new SQLException("Too many attempts");
             }
         } catch (SQLException e) {

@@ -3,7 +3,7 @@ package ua.com.juja.rybakov.sqlcmd.controller;
 import ua.com.juja.rybakov.sqlcmd.controller.command.*;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.MysqlDatabaseManager;
-import ua.com.juja.rybakov.sqlcmd.model.PostgresqlDatabaseManager;
+import ua.com.juja.rybakov.sqlcmd.model.PostgreSqlDatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.viuw.Console;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
@@ -26,7 +26,7 @@ public class Main {
             while (true) {
                 view.write("Enter command (or command 'help' for help): ");
                 String input = view.read();
-                if (input.equals("connect")){
+                if (input.equals("connect")) {
                     doConnect();
                     continue;
                 }
@@ -76,13 +76,13 @@ public class Main {
                     manager = new MysqlDatabaseManager();
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
-                }else if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
-                    manager = new PostgresqlDatabaseManager();
+                } else if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
+                    manager = new PostgreSqlDatabaseManager();
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
-                }else {
+                } else {
                     manager = new MysqlDatabaseManager(); //TODO Костиль, если не удалось опрееделить
-                                                          //TODO тип БД, то считаем, что это MySQL
+                    //TODO тип БД, то считаем, что это MySQL
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }
@@ -112,7 +112,7 @@ public class Main {
 //TODO          // могу додуматься, как реализовать по другому. Точнее реализовать знаю, как, но как реализовать,
 //TODO          // так, чтобы заработало, не знаю. Проблема в том, что в Main я определяю
 //TODO          // менеджера БД (mySQL или PostgreQL) manager = new MysqlDatabaseManager();
-//TODO          // в методе doConnect я переопределю при необходимости менеджера manager = new PostgresqlDatabaseManager();
+//TODO          // в методе doConnect я переопределю при необходимости менеджера manager = new PostgreSqlDatabaseManager();
 //TODO          // но из внешенего класса, я не могу этого сделать
 
                 new ListDatabase(view, manager),

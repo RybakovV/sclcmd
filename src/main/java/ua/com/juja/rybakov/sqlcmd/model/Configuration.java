@@ -15,7 +15,7 @@ public class Configuration {
     public static final String CONFIGURATION_FILE = "config/default.properties";
     private Properties properties;
 
-    public Configuration(){
+    public Configuration() {
         File file = new File(CONFIGURATION_FILE);
         properties = new Properties();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -26,23 +26,23 @@ public class Configuration {
         }
     }
 
-    String getMysqlServer(){
+    String getMysqlServer() {
         return properties.getProperty("mysql.server");
     }
 
-    String getMysqlPort(){
+    String getMysqlPort() {
         return properties.getProperty("mysql.port");
     }
 
-    String getMysqlUseSsl(){
+    String getMysqlUseSsl() {
         return properties.getProperty("mysql.usessl");
     }
 
-    String getPostgresqlServer(){
+    String getPostgreSqlServer() {
         return properties.getProperty("postgresql.server");
     }
 
-    String getPostgresqlPort(){
+    String getPostgresqlPort() {
         return properties.getProperty("postgresql.port");
     }
 

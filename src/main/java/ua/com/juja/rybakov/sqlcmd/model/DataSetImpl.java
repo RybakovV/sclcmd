@@ -7,12 +7,12 @@ import java.util.*;
  */
 public class DataSetImpl implements DataSet {
 
-    static class Data{
+    static class Data {
 
         private String columnName;
         private Object value;
 
-        public Data(String columnName, Object value){
+        public Data(String columnName, Object value) {
             this.columnName = columnName;
             this.value = value;
         }
@@ -35,16 +35,16 @@ public class DataSetImpl implements DataSet {
     }
 
     @Override
-    public List<String> getColumnNames(){
+    public List<String> getColumnNames() {
         List<String> result = new LinkedList<>();
         for (Data d : data) {
-            result.add(d.getColumnName()) ;
+            result.add(d.getColumnName());
         }
         return result;
     }
 
     @Override
-    public List<Object> getValues(){
+    public List<Object> getValues() {
         List<Object> result = new LinkedList<>();
         for (Data d : data) {
             result.add(d.getValue());
@@ -53,27 +53,27 @@ public class DataSetImpl implements DataSet {
     }
 
     @Override
-    public String getValuesString(){
+    public String getValuesString() {
         String result = "";
         List<Object> values = getValues();
         for (int i = 0; i < values.size(); i++) {
             Object obj = values.get(i);
-            if (obj instanceof String){
+            if (obj instanceof String) {
                 result += "'" + obj + "'";
-            }else {
+            } else {
                 result += obj;
             }
             result += ", ";
         }
-        result = result.substring(0,result.length()-2);
+        result = result.substring(0, result.length() - 2);
         return result;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return "DataStr{\n" +
-            "columnNames: " + getColumnNames().toString() + "\n" +
-            "value: " + getValues().toString() +"\n" + "}";
+                "columnNames: " + getColumnNames().toString() + "\n" +
+                "value: " + getValues().toString() + "\n" + "}";
     }
 
 }

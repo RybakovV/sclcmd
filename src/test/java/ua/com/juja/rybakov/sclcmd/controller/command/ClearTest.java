@@ -44,6 +44,7 @@ public class ClearTest {
         //then
     }
 
+    //TODO mockito c подтверждением
 /*
     @Test
     public void clearTableTest() throws SQLException {

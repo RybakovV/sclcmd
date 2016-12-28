@@ -19,7 +19,7 @@ public abstract class DatabaseManagerTest {
     public abstract DatabaseManager getDatabaseManager();
 
     @Before
-    public void sutup() throws SQLException {
+    public void setup() throws SQLException {
         manager = getDatabaseManager();
 
         String databaseName = manager.getDatabaseName();
@@ -103,4 +103,28 @@ public abstract class DatabaseManagerTest {
     public void testIsConnected() {
         assertTrue(manager.isConnected());
     }
+
+    @Test
+    public void testInsert() throws SQLException {
+
+        String tableName = "user";
+        manager.clear(tableName);
+
+        DataSet data = new DataSetImpl();
+        data.put("id", 17);
+        data.put("name", "testInsert");
+        data.put("password", "pswd-testInsert");
+
+        manager.insert(tableName, data);
+
+        assertEquals("[DataStr{\n" +
+                "columnNames: [id, name, password]\n" +
+                "value: [17, testInsert, pswd-testInsert]\n" +
+                "}]", manager.getTableData(tableName).toString());
+
+    }
+
+
 }
+
+

@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.*;
 
 
-public class PostgresqlDatabaseManager implements DatabaseManager {
+public class PostgreSqlDatabaseManager implements DatabaseManager {
     private Connection connection;
     private String databaseName;
     private String userName;
@@ -18,12 +18,12 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         if (tableSize > 0) {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM public." + tableName)) {
-                ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+                ResultSetMetaData metaData = resultSet.getMetaData();
                 int columnCount = getColumnCount(tableName);
                 while (resultSet.next()) {
                     DataSet dataSet = new DataSetImpl();
                     for (int i = 1; i <= columnCount; i++) {
-                        dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+                        dataSet.put(metaData.getColumnName(i), resultSet.getObject(i));
                     }
                     result.add(dataSet);
                 }
@@ -41,14 +41,14 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             resultSet.next();
             countRows = resultSet.getInt(1);
         } catch (SQLException e) {
-            //do nothing
+            e.printStackTrace();
         }
         return countRows;
     }
 
     @Override
     public Set<String> getAllTablesOfDataBase() {
-        Set <String> tables = new TreeSet<>();
+        Set<String> tables = new TreeSet<>();
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT table_name FROM information_schema.tables WHERE table_schema='public'")) {
             while (resultSet.next()) {
@@ -68,10 +68,10 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
             throw new RuntimeException("Please register you JDBC driver", e);
         }
         try {
-            String url = "jdbc:postgresql://"+ configuration.getPostgresqlServer() + "/" + database;
+            String url = "jdbc:postgresql://" + configuration.getPostgreSqlServer() + "/" + database;
             connection = DriverManager.getConnection(url, user, password);
 
-        } catch (SQLException ePostgresConnection) {
+        } catch (SQLException e1) {
             try {
                 Class.forName("com.mysql.jdbc.Driver");
             } catch (ClassNotFoundException eClassNotFoundMySQL) {
@@ -84,9 +84,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
 
                 connection = DriverManager.getConnection(url, user, password);
 
-            } catch (SQLException eMySQLException) {
+            } catch (SQLException e) {
                 connection = null;
-                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), eMySQLException);
+                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), e);
             }
         }
     }
@@ -107,13 +107,13 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     @Override
     public int getColumnCount(String tableName) {
         int columnCount = 0;
-        ResultSetMetaData resultSetMetaData;
+        ResultSetMetaData metaData;
         try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery("SELECT * FROM public." + tableName)) {
-            resultSetMetaData = resultSet.getMetaData();
-            columnCount = resultSetMetaData.getColumnCount();
+            metaData = resultSet.getMetaData();
+            columnCount = metaData.getColumnCount();
         } catch (SQLException e) {
-            //do nothing
+            e.printStackTrace();
         }
         return columnCount;
     }
@@ -123,15 +123,15 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
         int columnCount = getColumnCount(tableName);
         Set<String> columnNames = new LinkedHashSet<>();
         if (columnCount > 0) {
-            ResultSetMetaData resultSetMetaData;
+            ResultSetMetaData metaData;
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM public." + tableName)) {
-                resultSetMetaData = resultSet.getMetaData();
+                metaData = resultSet.getMetaData();
                 for (int i = 0; i < columnCount; i++) {
-                    columnNames.add(resultSetMetaData.getColumnName(i + 1));
+                    columnNames.add(metaData.getColumnName(i + 1));
                 }
             } catch (SQLException e) {
-                //do nothing
+                e.printStackTrace();
             }
         }
         return columnNames;
@@ -141,9 +141,9 @@ public class PostgresqlDatabaseManager implements DatabaseManager {
     public void insert(String tableName, DataSet data) {
         try (Statement statement = connection.createStatement()) {
             String valueSet = data.getValuesString();
-            String columnNameSet = data.getColumnNames().toString();
-            columnNameSet = columnNameSet.substring(1, columnNameSet.length() - 1);
-            String sql = "INSERT INTO public." + tableName + "(" + columnNameSet + ") VALUES (" + valueSet + ")";
+            String columnNames = data.getColumnNames().toString();
+            columnNames = columnNames.substring(1, columnNames.length() - 1);
+            String sql = "INSERT INTO public." + tableName + "(" + columnNames + ") VALUES (" + valueSet + ")";
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException("", e);

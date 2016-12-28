@@ -39,14 +39,14 @@ public class IntegrationTest {
             manager.clear(tableName);
             manager.insert(tableName, data);
 
-            manager = new PostgresqlDatabaseManager();
+            manager = new PostgreSqlDatabaseManager();
             manager.connectToDataBase("pgsqlcmd", "postgres", "postgres");
             tableName = "user";
             manager.clear(tableName);
             manager.insert(tableName, data);
 
-        } catch (RuntimeException e) {
-            //do noting
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
@@ -57,6 +57,7 @@ public class IntegrationTest {
 
     @Test
     public void testListDatabases() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -71,7 +72,10 @@ public class IntegrationTest {
 
         in.add("exit");
 
+        //when
         Main.main(new String[0]);
+
+        //then
         String actual = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -108,6 +112,7 @@ public class IntegrationTest {
 
     @Test
     public void testConnect() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -120,7 +125,10 @@ public class IntegrationTest {
 
         in.add("exit");
 
+        //when
         Main.main(new String[0]);
+
+        //then
         String actual = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -150,6 +158,7 @@ public class IntegrationTest {
 
     @Test
     public void testConnectToStoppedDB() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -178,16 +187,12 @@ public class IntegrationTest {
 
         in.add("exit");
 
-
+        //when
         ServiceStartStop.main(new String[]{"stop", SERVICE_NAME_POSTGRES});
         ServiceStartStop.main(new String[]{"stop", SERVICE_NAME_MYSQL});
-
         Main.main(new String[0]);
 
-        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_POSTGRES});
-        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_MYSQL});
-
-
+        //then
         String actual = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -248,10 +253,15 @@ public class IntegrationTest {
                 //exit
                 "See you soon!!!\n";
         assertEquals(expected, actual);
+
+        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_POSTGRES});
+        ServiceStartStop.main(new String[]{"start", SERVICE_NAME_MYSQL});
+
     }
 
     @Test
     public void testInsert() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -291,7 +301,11 @@ public class IntegrationTest {
         in.add("print user");
 
         in.add("exit");
+
+        //when
         Main.main(new String[0]);
+
+        //then
         String actual = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -397,6 +411,7 @@ public class IntegrationTest {
 
     @Test
     public void testEdit() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -410,7 +425,11 @@ public class IntegrationTest {
         in.add("passwordinmysqlcmd");
         in.add("print user");
         in.add("exit");
+
+        //when
         Main.main(new String[0]);
+
+        //then
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -457,6 +476,7 @@ public class IntegrationTest {
 
     @Test
     public void testEditNotExistTable() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
@@ -464,7 +484,9 @@ public class IntegrationTest {
         in.add("edit");
         in.add("edit users");
         in.add("exit");
+        //when
         Main.main(new String[0]);
+        //then
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -491,13 +513,18 @@ public class IntegrationTest {
 
     @Test
     public void testExit() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
         in.add("root");
         in.add("print test-sql");
         in.add("exit");
+
+        //when
         Main.main(new String[0]);
+
+        //then
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -521,13 +548,17 @@ public class IntegrationTest {
 
     @Test
     public void testPrintNotExistTable() {
+        //given
         in.add("connect");
         in.add("mysqlcmd");
         in.add("root");
         in.add("root");
         in.add("print test");
         in.add("exit");
+
+        //when
         Main.main(new String[0]);
+        //then
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
@@ -553,6 +584,7 @@ public class IntegrationTest {
 
     @Test
     public void testAll() {
+        //given
         in.add("cleare");
         in.add("list");
         in.add("helps");
@@ -631,8 +663,10 @@ public class IntegrationTest {
 
         in.add("exit");
 
-
+        //when
         Main.main(new String[0]);
+
+        //then
         String actusal = getData();
         String expected = "Hello\n" +
                 "Enter command (or command 'help' for help): \n" +
