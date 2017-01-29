@@ -45,6 +45,7 @@ public class ClearTest {
     }
 
     //TODO mockito c подтверждением
+
 /*
     @Test
     public void clearTableTest() throws SQLException {
@@ -52,8 +53,9 @@ public class ClearTest {
         command.process("clear user");
         //then
         Mockito.verify(manager).clear("user");
-        Mockito.verify(view).write("The table 'user' cleared");
+
     }
+
 */
 
 

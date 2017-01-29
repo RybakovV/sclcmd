@@ -25,13 +25,18 @@ public class Print implements Command {
 
     @Override
     public void process(String input) {
+        String[] command = parseCommand(input);
+        tableName = command[1];
+        List<DataSet> data = manager.getTableData(tableName);
+        view.write(getTableString(data));
+    }
+
+    private String[] parseCommand(String input) {
         String[] command = input.split(" ");
         if (command.length != 2) {
             throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
         }
-        tableName = command[1];
-        List<DataSet> data = manager.getTableData(tableName);
-        view.write(getTableString(data));
+        return command;
     }
 
     private String getTableString(List<DataSet> data) {
@@ -60,15 +65,19 @@ public class Print implements Command {
         return result;
     }
 
+
+
     private int getMaxColumnSize(List<DataSet> dataSets) {
         int maxLength = 0;
         if (dataSets.size() > 0) {
             List<String> columnNames = dataSets.get(0).getColumnNames();
-            for (String columnName : columnNames) {
-                if (columnName.length() > maxLength) {
-                    maxLength = columnName.length();
+
+            for (String name : columnNames) {
+                if (name.length() > maxLength) {
+                    maxLength = name.length();
                 }
             }
+
             for (DataSet dataSet : dataSets) {
                 List<Object> values = dataSet.getValues();
                 for (Object value : values) {

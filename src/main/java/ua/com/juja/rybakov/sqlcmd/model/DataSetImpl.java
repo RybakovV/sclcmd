@@ -8,7 +8,6 @@ import java.util.*;
 public class DataSetImpl implements DataSet {
 
     static class Data {
-
         private String columnName;
         private Object value;
 
@@ -16,7 +15,6 @@ public class DataSetImpl implements DataSet {
             this.columnName = columnName;
             this.value = value;
         }
-
 
         public String getColumnName() {
             return columnName;
@@ -37,8 +35,8 @@ public class DataSetImpl implements DataSet {
     @Override
     public List<String> getColumnNames() {
         List<String> result = new LinkedList<>();
-        for (Data d : data) {
-            result.add(d.getColumnName());
+        for (Data element : data) {
+            result.add(element.getColumnName());
         }
         return result;
     }
@@ -46,8 +44,8 @@ public class DataSetImpl implements DataSet {
     @Override
     public List<Object> getValues() {
         List<Object> result = new LinkedList<>();
-        for (Data d : data) {
-            result.add(d.getValue());
+        for (Data element : data) {
+            result.add(element.getValue());
         }
         return result;
     }

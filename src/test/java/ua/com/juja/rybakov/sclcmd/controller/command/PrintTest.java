@@ -19,6 +19,7 @@ import java.util.List;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.fail;
 import static org.junit.Assert.assertEquals;
 
 
@@ -27,6 +28,7 @@ public class PrintTest {
     private DatabaseManager manager;
     private Command command;
 
+
     @Before
     public void setup() {
         manager = Mockito.mock(DatabaseManager.class);
@@ -34,8 +36,29 @@ public class PrintTest {
         command = new Print(view, manager);
     }
 
+    private void setupTable(String tableName, DataSet... users) {
+        List<DataSet> dataSets = new LinkedList<>();
+        dataSets.addAll(Arrays.asList(users));
+        Mockito.when(manager.getTableData(tableName)).thenReturn(dataSets);
+    }
+
+    private DataSet user(int id, String name, String password) {
+        DataSet user = putId(id);
+        user.put("name", name);
+        user.put("password", password);
+        return user;
+    }
+
+
     @Test
     public void incorrectNumberOfParameters() {
+        //when
+        try{
+            command.process("print");
+            fail();
+        }catch (IllegalArgumentException e){
+        assertEquals("incorrect number of parameters. Expected 1, but is 0",e.getMessage());
+    }
 
     }
 
@@ -60,18 +83,6 @@ public class PrintTest {
                      "╚════════════════╩════════════════╩════════════════╝\n" + "]");
     }
 
-    private void setupTable(String tableName, DataSet... users) {
-        List<DataSet> dataSets = new LinkedList<>();
-        dataSets.addAll(Arrays.asList(users));
-        Mockito.when(manager.getTableData(tableName)).thenReturn(dataSets);
-    }
-
-    private DataSet user(int id, String name, String password) {
-        DataSet user = putId(id);
-        user.put("name", name);
-        user.put("password", password);
-        return user;
-    }
 
     @Test
     public void printTableWithOneColumn() {

@@ -23,23 +23,29 @@ public class Insert implements Command {
 
     @Override
     public void process(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
+        String[] command = parse(input);
         String tableName = command[1];
         Set<String> columnName = manager.getColumnNames(tableName);
+
         if (columnName.size() > 0) {
             view.write("Enter the data when you want to insert.");
             DataSet insertData = new DataSetImpl();
-            for (String aColumnName : columnName) {
-                view.write("Input " + aColumnName + ":");
+            for (String name : columnName) {
+                view.write("Input " + name + ":");
                 Object value = view.read();
-                insertData.put(aColumnName, value);
+                insertData.put(name, value);
             }
             manager.insert(tableName, insertData);
         } else {
             throw new IllegalArgumentException("Table '" + tableName + "' doesn't exist");
         }
+    }
+
+    private String[] parse(String input) {
+        String[] command = input.split(" ");
+        if (command.length != 2) {
+            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
+        }
+        return command;
     }
 }

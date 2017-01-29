@@ -923,7 +923,7 @@ public class IntegrationTest {
                 //Н
                 "Enter Y (if yes) or N (if no):\n" +
                 //н
-                "The table 'qwe' is not cleared. Because: Too many attempts\n"+
+                "The table 'qwe' is not cleared. Because: too many attempts\n"+
                 "Enter command (or command 'help' for help): \n" +
                 //clear user
                 "All data will be deleted from the table. Do you really want to do it? (Y/N):\n"+

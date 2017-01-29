@@ -31,23 +31,23 @@ public class Clear implements Command {
         try {
             view.write("All data will be deleted from the table. Do you really want to do it? (Y/N):");
             String answer = view.read();
-            //TODO TryCount
-            int tryCount = 0;
-            while (tryCount < 3) {
-                tryCount++;
+            int attemtsCount = 0;
+            while (attemtsCount < 3) {
                 if (answer.equals("y") | answer.equals("Y")) {
                     manager.clear(tableName);
                     break;
-                } else if (answer.equals("n") | answer.equals("N")) {
+                }
+                if (answer.equals("n") | answer.equals("N")) {
                     message = "The table is not cleared";
                     break;
-                } else {
-                    view.write("Enter Y (if yes) or N (if no):");
-                    answer = view.read();
                 }
+
+                view.write("Enter Y (if yes) or N (if no):");
+                answer = view.read();
+                attemtsCount++;
             }
-            if (tryCount == 3) {
-                throw new SQLException("Too many attempts");
+            if (attemtsCount == 3) {
+                throw new SQLException("too many attempts");
             }
         } catch (SQLException e) {
             message = "The table '" + tableName + "' is not cleared. Because: " + e.getMessage();
