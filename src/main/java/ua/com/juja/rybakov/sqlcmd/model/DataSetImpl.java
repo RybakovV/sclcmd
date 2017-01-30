@@ -34,8 +34,8 @@ public class DataSetImpl implements DataSet {
     }
 
     @Override
-    public List<String> getColumnNames() {
-        List<String> result = new LinkedList<>();
+    public List<Object> getColumnNames() {
+        List<Object> result = new LinkedList<>();
         for (Data d : data) {
             result.add(d.getColumnName());
         }
@@ -69,7 +69,7 @@ public class DataSetImpl implements DataSet {
     @Override
     public String getColumnNamesString() {
         String result = "";
-        List<String> columnNames = getColumnNames();
+        List<Object> columnNames = getColumnNames();
         result = columnNames.toString();
         result = result.substring(1,result.length()-1);
         return result;

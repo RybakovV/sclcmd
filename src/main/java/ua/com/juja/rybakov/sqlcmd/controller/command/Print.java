@@ -82,10 +82,10 @@ public class Print implements Command {
     public int getMaxColumnSizeHeader(List<DataSet> dataSets) {
         int result = 0;
         if (dataSets.size() > 0) {
-            List<String> columnNames = dataSets.get(0).getColumnNames();
-            for (String name : columnNames) {
-                if (name.length() > result) {
-                    result = name.length();
+            List<Object> columnNames = dataSets.get(0).getColumnNames();
+            for (Object name : columnNames) {
+                if (String.valueOf(name).length() > result) {
+                    result = String.valueOf(name).length();
                 }
             }
         }
@@ -121,31 +121,8 @@ public class Print implements Command {
         int rowsCount = dataSets.size();
         for (int row = 0; row < rowsCount; row++) {
             List<Object> values = dataSets.get(row).getValues();
-            result += "║";
-            for (int column = 0; column < columnCount; column++) {
-                int valuesLength = String.valueOf(values.get(column)).length();
-                if (valuesLength % 2 == 0) {
-                    for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
-                        result += " ";
-                    }
-                    result += String.valueOf(values.get(column));
-                    for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
-                        result += " ";
-                    }
-                    result += "║";
-                } else {
-                    for (int j = 0; j < (maxColumnSize - valuesLength) / 2; j++) {
-                        result += " ";
-                    }
-                    result += String.valueOf(values.get(column));
-                    for (int j = 0; j <= (maxColumnSize - valuesLength) / 2; j++) {
-                        result += " ";
-                    }
-                    result += "║";
-                }
-            }
+            result += getStringData(values, maxColumnSize);
             result += "\n";
-
             if (row < rowsCount - 1) {
                 result += getSeparatorString(dataSets);
             }
@@ -233,31 +210,37 @@ public class Print implements Command {
 
     private String getColumnNamesString(List<DataSet> dataSets) {
         int maxColumnSize = getMaxColumnSize(dataSets);
-        int columnCount = getColumnCount(dataSets);
-        List<String> columnNames = dataSets.get(0).getColumnNames();
+        List<Object> columnNames = dataSets.get(0).getColumnNames();
+        String result = getStringData(columnNames, maxColumnSize);
+        result += "\n";
+        return result;
+    }
+
+    private String getStringData(List<Object> columnNames, int maxColumnSize) {
         String result = "║";
-        for (int column = 0; column < columnCount; column++) {
-            int columnNamesLength = columnNames.get(column).length();
+
+        for (int column = 0; column < columnNames.size(); column++) {
+            int columnNamesLength = String.valueOf(columnNames.get(column)).length();
+            int countSpace = (maxColumnSize - columnNamesLength) / 2;
             if (columnNamesLength % 2 == 0) {
-                for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
-                    result += " ";
-                }
-                result += columnNames.get(column);
-                for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
-                    result += " ";
-                }
+                result += addSpace(countSpace);
+                result += String.valueOf(columnNames.get(column));
+                result += addSpace(countSpace);
             } else {
-                for (int j = 0; j < (maxColumnSize - columnNamesLength) / 2; j++) {
-                    result += " ";
-                }
+                result += addSpace(countSpace);
                 result += columnNames.get(column);
-                for (int j = 0; j <= (maxColumnSize - columnNamesLength) / 2; j++) {
-                    result += " ";
-                }
+                result += addSpace(countSpace+1);
             }
             result += "║";
         }
-        result += "\n";
+        return result;
+    }
+
+    private String addSpace(int count) {
+        String result = "";
+        for (int j = 0; j < count; j++) {
+            result += " ";
+        }
         return result;
     }
 }

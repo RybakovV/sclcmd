@@ -109,7 +109,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     private String getStringDataSet(DataSet data, String sql) {
-        List<String> columnName = data.getColumnNames();
+        List<Object> columnName = data.getColumnNames();
         List<Object> value = data.getValues();
         for (int i = 0; i < columnName.size(); i++) {
             sql += columnName.get(i) + " = '" + value.get(i) + "', ";
