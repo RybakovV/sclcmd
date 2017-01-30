@@ -6,7 +6,6 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.List;
 
-
 public class Print implements Command {
 
     private View view;
@@ -40,9 +39,7 @@ public class Print implements Command {
     }
 
     private String getTableString(List<DataSet> data) {
-        int maxColumnSize;
-        maxColumnSize = getMaxColumnSize(data);
-        if (maxColumnSize == 0) {
+        if (data.size() == 0) {
             return getEmptyTable(tableName);
         } else {
             return getHeaderOfTheTable(data) + getStringTableData(data);
@@ -65,14 +62,21 @@ public class Print implements Command {
         return result;
     }
 
-
     private int getMaxColumnSize(List<DataSet> dataSets) {
+        int maxColumnSize;
         int maxLengthHeader = getMaxColumnSizeHeader(dataSets);
         int maxLengthData = getMaxColumnSizeData(dataSets);
         if (maxLengthHeader > maxLengthData) {
-            return maxLengthHeader;
+            maxColumnSize = maxLengthHeader;
+        }else {
+            maxColumnSize = maxLengthData;
         }
-        return maxLengthData;
+        if (maxColumnSize % 2 == 0) {
+            maxColumnSize += 2;
+        } else {
+            maxColumnSize += 3;
+        }
+        return maxColumnSize;
     }
 
     public int getMaxColumnSizeHeader(List<DataSet> dataSets) {
@@ -104,17 +108,17 @@ public class Print implements Command {
     }
 
     private String getStringTableData(List<DataSet> dataSets) {
-        int rowsCount;
-        rowsCount = dataSets.size();
-        int maxColumnSize = getMaxColumnSize(dataSets);
         String result = "";
-        if (maxColumnSize % 2 == 0) {
-            maxColumnSize += 2;
-        } else {
-            maxColumnSize += 3;
-        }
-        int columnCount = getColumnCount(dataSets);
+        result += getDataString(dataSets);
+        result += getLastString(dataSets);
+        return result;
+    }
 
+    private String getDataString(List<DataSet> dataSets) {
+        int maxColumnSize = getMaxColumnSize(dataSets);
+        int columnCount = getColumnCount(dataSets);
+        String result = "";
+        int rowsCount = dataSets.size();
         for (int row = 0; row < rowsCount; row++) {
             List<Object> values = dataSets.get(row).getValues();
             result += "║";
@@ -143,24 +147,33 @@ public class Print implements Command {
             result += "\n";
 
             if (row < rowsCount - 1) {
-                result += "╠";
-                for (int j = 1; j < columnCount; j++) {
-                    for (int i = 0; i < maxColumnSize; i++) {
-                        result += "═";
-                    }
-                    result += "╬";
-                }
-                for (int i = 0; i < maxColumnSize; i++) {
-                    result += "═";
-                }
-                result += "╣\n";
+                result += getSeparatorString(dataSets);
             }
         }
-        result += getLastString(maxColumnSize, columnCount);
         return result;
     }
 
-    private String getLastString(int maxColumnSize, int columnCount) {
+    private String getSeparatorString(List<DataSet> dataSets) {
+        int maxColumnSize = getMaxColumnSize(dataSets);
+        int columnCount = getColumnCount(dataSets);
+        String result = "╠";
+        for (int j = 1; j < columnCount; j++) {
+            for (int i = 0; i < maxColumnSize; i++) {
+                result += "═";
+            }
+            result += "╬";
+        }
+        for (int i = 0; i < maxColumnSize; i++) {
+            result += "═";
+        }
+        result += "╣\n";
+        return result;
+    }
+
+    private String getLastString(List<DataSet> dataSets) {
+        int maxColumnSize = getMaxColumnSize(dataSets);
+        int columnCount = getColumnCount(dataSets);
+
         String result = "╚";
         for (int j = 1; j < columnCount; j++) {
             for (int i = 0; i < maxColumnSize; i++) {
@@ -184,41 +197,26 @@ public class Print implements Command {
     }
 
     private String getHeaderOfTheTable(List<DataSet> dataSets) {
-        int maxColumnSize = getMaxColumnSize(dataSets);
         String result = "";
-        int columnCount = getColumnCount(dataSets);
-        if (maxColumnSize % 2 == 0) {
-            maxColumnSize += 2;
-        } else {
-            maxColumnSize += 3;
-        }
-        result += getFirstString(maxColumnSize, columnCount);
-        result += getColumnNamesString(dataSets, maxColumnSize, columnCount);
-        result += getLastStringHeaderTable(dataSets, maxColumnSize, columnCount);
+        result += getFirstString(dataSets);
+        result += getColumnNamesString(dataSets);
+        result += getLastStringHeaderTable(dataSets);
         return result;
     }
 
-    private String getLastStringHeaderTable(List<DataSet> dataSets, int maxColumnSize, int columnCount) {
+    private String getLastStringHeaderTable(List<DataSet> dataSets) {
         String result = "";
         if (dataSets.size() > 0) {
-            result += "╠";
-            for (int j = 1; j < columnCount; j++) {
-                for (int i = 0; i < maxColumnSize; i++) {
-                    result += "═";
-                }
-                result += "╬";
-            }
-            for (int i = 0; i < maxColumnSize; i++) {
-                result += "═";
-            }
-            result += "╣\n";
+            result += getSeparatorString(dataSets);
         } else {
-            result = getLastString(maxColumnSize, columnCount);
+            result += getLastString(dataSets);
         }
         return result;
     }
 
-    private String getFirstString(int maxColumnSize, int columnCount) {
+    private String getFirstString(List<DataSet> dataSets) {
+        int maxColumnSize = getMaxColumnSize(dataSets);
+        int columnCount = getColumnCount(dataSets);
         String result = "╔";
         for (int j = 1; j < columnCount; j++) {
             for (int i = 0; i < maxColumnSize; i++) {
@@ -233,7 +231,9 @@ public class Print implements Command {
         return result;
     }
 
-    private String getColumnNamesString(List<DataSet> dataSets, int maxColumnSize, int columnCount) {
+    private String getColumnNamesString(List<DataSet> dataSets) {
+        int maxColumnSize = getMaxColumnSize(dataSets);
+        int columnCount = getColumnCount(dataSets);
         List<String> columnNames = dataSets.get(0).getColumnNames();
         String result = "║";
         for (int column = 0; column < columnCount; column++) {
