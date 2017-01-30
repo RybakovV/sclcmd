@@ -116,7 +116,6 @@ public class Print implements Command {
 
     private String getDataString(List<DataSet> dataSets) {
         int maxColumnSize = getMaxColumnSize(dataSets);
-        int columnCount = getColumnCount(dataSets);
         String result = "";
         int rowsCount = dataSets.size();
         for (int row = 0; row < rowsCount; row++) {
@@ -222,13 +221,11 @@ public class Print implements Command {
         for (int column = 0; column < columnNames.size(); column++) {
             int columnNamesLength = String.valueOf(columnNames.get(column)).length();
             int countSpace = (maxColumnSize - columnNamesLength) / 2;
+            result += addSpace(countSpace);
+            result += String.valueOf(columnNames.get(column));
             if (columnNamesLength % 2 == 0) {
                 result += addSpace(countSpace);
-                result += String.valueOf(columnNames.get(column));
-                result += addSpace(countSpace);
             } else {
-                result += addSpace(countSpace);
-                result += columnNames.get(column);
                 result += addSpace(countSpace+1);
             }
             result += "║";
