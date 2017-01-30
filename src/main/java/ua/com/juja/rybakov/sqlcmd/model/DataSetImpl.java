@@ -2,6 +2,7 @@ package ua.com.juja.rybakov.sqlcmd.model;
 
 import java.util.*;
 
+
 /**
  * Created by Rybakov Vitaliy on 12.09.2016.
  */
@@ -35,8 +36,8 @@ public class DataSetImpl implements DataSet {
     @Override
     public List<String> getColumnNames() {
         List<String> result = new LinkedList<>();
-        for (Data element : data) {
-            result.add(element.getColumnName());
+        for (Data d : data) {
+            result.add(d.getColumnName());
         }
         return result;
     }
@@ -44,8 +45,8 @@ public class DataSetImpl implements DataSet {
     @Override
     public List<Object> getValues() {
         List<Object> result = new LinkedList<>();
-        for (Data element : data) {
-            result.add(element.getValue());
+        for (Data d : data) {
+            result.add(d.getValue());
         }
         return result;
     }
@@ -54,16 +55,23 @@ public class DataSetImpl implements DataSet {
     public String getValuesString() {
         String result = "";
         List<Object> values = getValues();
-        for (int i = 0; i < values.size(); i++) {
-            Object obj = values.get(i);
-            if (obj instanceof String) {
-                result += "'" + obj + "'";
+        for (Object value: values) {
+            if (value instanceof String) {
+                result += "'" + value + "'";
             } else {
-                result += obj;
+                result += value;
             }
             result += ", ";
         }
-        result = result.substring(0, result.length() - 2);
+        return result.substring(0, result.length() - 2);
+    }
+
+    @Override
+    public String getColumnNamesString() {
+        String result = "";
+        List<String> columnNames = getColumnNames();
+        result = columnNames.toString();
+        result = result.substring(1,result.length()-1);
         return result;
     }
 

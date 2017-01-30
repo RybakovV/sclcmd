@@ -99,18 +99,23 @@ public class MysqlDatabaseManager implements DatabaseManager {
     @Override
     public void update(String tableName, int id, DataSet data) {
         try (Statement statement = connection.createStatement()) {
-            List<String> columnName = data.getColumnNames();
-            List<Object> value = data.getValues();
             String sql = "UPDATE " + tableName + " SET ";
-            for (int i = 0; i < columnName.size(); i++) {
-                sql += columnName.get(i) + " = '" + value.get(i) + "', ";
-            }
-            sql = sql.substring(0, sql.length() - 2);
+            sql = getStringDataSet(data, sql);
             sql += " WHERE id = " + id;
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getStringDataSet(DataSet data, String sql) {
+        List<String> columnName = data.getColumnNames();
+        List<Object> value = data.getValues();
+        for (int i = 0; i < columnName.size(); i++) {
+            sql += columnName.get(i) + " = '" + value.get(i) + "', ";
+        }
+        sql = sql.substring(0, sql.length() - 2);
+        return sql;
     }
 
     @Override

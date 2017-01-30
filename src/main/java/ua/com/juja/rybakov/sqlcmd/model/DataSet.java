@@ -6,7 +6,6 @@ import java.util.List;
  * Created by Vitaliy Ryvakov on 15.12.2016.
  */
 public interface DataSet {
-
     void put(String columnName, Object value);
 
     List<String> getColumnNames();
@@ -14,4 +13,6 @@ public interface DataSet {
     List<Object> getValues();
 
     String getValuesString();
+
+    String getColumnNamesString();
 }
