@@ -14,5 +14,4 @@ public interface DataSet {
 
     String getValuesString();
 
-    String getColumnNamesString();
 }

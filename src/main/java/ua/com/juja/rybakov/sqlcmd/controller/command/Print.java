@@ -149,7 +149,6 @@ public class Print implements Command {
     private String getLastString(List<DataSet> dataSets) {
         int maxColumnSize = getMaxColumnSize(dataSets);
         int columnCount = getColumnCount(dataSets);
-
         String result = "╚";
         for (int j = 1; j < columnCount; j++) {
             for (int i = 0; i < maxColumnSize; i++) {
@@ -217,7 +216,6 @@ public class Print implements Command {
 
     private String getStringData(List<Object> columnNames, int maxColumnSize) {
         String result = "║";
-
         for (int column = 0; column < columnNames.size(); column++) {
             int columnNamesLength = String.valueOf(columnNames.get(column)).length();
             int countSpace = (maxColumnSize - columnNamesLength) / 2;

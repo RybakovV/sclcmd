@@ -81,8 +81,9 @@ public class Main {
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 } else {
-                    manager = new MysqlDatabaseManager(); //TODO Костиль, если не удалось опрееделить
+                    //TODO Костиль, если не удалось опрееделить
                     //TODO тип БД, то считаем, что это MySQL
+                    manager = new MysqlDatabaseManager();
                     commands = initializeCommands();
                     manager.connectToDataBase(databaseName, userName, userPassword);
                 }

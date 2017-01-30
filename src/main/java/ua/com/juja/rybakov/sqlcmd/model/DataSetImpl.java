@@ -67,15 +67,6 @@ public class DataSetImpl implements DataSet {
     }
 
     @Override
-    public String getColumnNamesString() {
-        String result = "";
-        List<Object> columnNames = getColumnNames();
-        result = columnNames.toString();
-        result = result.substring(1,result.length()-1);
-        return result;
-    }
-
-    @Override
     public String toString() {
         return "DataStr{\n" +
                 "columnNames: " + getColumnNames().toString() + "\n" +
