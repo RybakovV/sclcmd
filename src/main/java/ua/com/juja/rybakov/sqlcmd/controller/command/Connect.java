@@ -1,5 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.controller.command;
 
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+import ua.com.juja.rybakov.sqlcmd.controller.SignReader;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.MysqlDatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.PostgreSqlDatabaseManager;
@@ -25,23 +27,18 @@ public class Connect implements Command {
         int countTry = 0;
         while (countTry < 3) {
             countTry++;
-            view.write("Enter Database name: ");
-            String databaseName = view.read();
-            view.write("Enter userName");
-            String userName = view.read();
-            view.write("Enter password");
-            String userPassword = view.read();
+            Sign sign = new SignReader().read(view);
             try {
-                manager.connectToDataBase(databaseName, userName, userPassword);
+                manager.connectToDataBase(sign);
                 if (manager.getVersionDatabase().equals("MySQL")) {
                     manager = new MysqlDatabaseManager();
                     //commands = initializeCommands();
-                    manager.connectToDataBase(databaseName, userName, userPassword);
+                    manager.connectToDataBase(sign);
                 }
                 if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
                     manager = new PostgreSqlDatabaseManager();
                     //commands = initializeCommands();
-                    manager.connectToDataBase(databaseName, userName, userPassword);
+                    manager.connectToDataBase(sign);
                 }
                 view.write("You connected to " + manager.getVersionDatabase() + " database");
                 break;

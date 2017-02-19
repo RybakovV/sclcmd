@@ -2,6 +2,8 @@ package ua.com.juja.rybakov.sclcmd.model;
 
 import org.junit.Before;
 import org.junit.Test;
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+import ua.com.juja.rybakov.sqlcmd.controller.SignReader;
 import ua.com.juja.rybakov.sqlcmd.model.DataSetImpl;
 import ua.com.juja.rybakov.sqlcmd.model.DatabaseManager;
 import ua.com.juja.rybakov.sqlcmd.model.DataSet;
@@ -25,7 +27,8 @@ public abstract class DatabaseManagerTest {
         String databaseName = manager.getDatabaseName();
         String userName = manager.getUserName();
         String userPassword = manager.getUserPassword();
-        manager.connectToDataBase(databaseName, userName, userPassword);
+        Sign sign = new SignReader(databaseName, userName, userPassword);
+        manager.connectToDataBase(sign);
 
         String tableName = "user";
         manager.clear(tableName);

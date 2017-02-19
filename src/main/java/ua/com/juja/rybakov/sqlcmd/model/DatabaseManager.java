@@ -1,5 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
@@ -10,7 +12,7 @@ public interface DatabaseManager {
 
     Set<String> getAllTablesOfDataBase();
 
-    void connectToDataBase(String database, String user, String password);
+    void connectToDataBase(Sign sign);
 
     void update(String tableName, int id, DataSet data);
 

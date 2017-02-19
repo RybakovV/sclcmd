@@ -61,13 +61,9 @@ public class Main {
         int countTry = 0;
         while (countTry < 3) {
             countTry++;
-            Sign sign = new Sign().invoke(view);
-            String databaseName = sign.getDatabaseName();
-            String userName = sign.getUserName();
-            String userPassword = sign.getUserPassword();
-
+            Sign sign = new SignReader().read(view);
             try {
-                connect(databaseName, userName, userPassword);
+                connect(sign);
                 view.write("You connected to " + manager.getVersionDatabase() + " database");
                 break;
             } catch (Exception e) {
@@ -76,16 +72,16 @@ public class Main {
         }
     }
 
-    private static void connect(String databaseName, String userName, String userPassword) {
-        manager.connectToDataBase(databaseName, userName, userPassword);
+    private static void connect(Sign sign) {
+        manager.connectToDataBase(sign);
         if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
             manager = new PostgreSqlDatabaseManager();
             commands = initializeCommands();
-            manager.connectToDataBase(databaseName, userName, userPassword);
+            manager.connectToDataBase(sign);
         } else {
             manager = new MysqlDatabaseManager();
             commands = initializeCommands();
-            manager.connectToDataBase(databaseName, userName, userPassword);
+            manager.connectToDataBase(sign);
         }
     }
 

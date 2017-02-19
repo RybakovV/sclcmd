@@ -3,6 +3,8 @@ package ua.com.juja.rybakov.sclcmd.integration;
 import org.junit.Before;
 import org.junit.Test;
 import ua.com.juja.rybakov.sqlcmd.controller.Main;
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+import ua.com.juja.rybakov.sqlcmd.controller.SignReader;
 import ua.com.juja.rybakov.sqlcmd.model.*;
 
 import java.io.ByteArrayOutputStream;
@@ -35,12 +37,15 @@ public class IntegrationTest {
         data.put("name", "Pupkin");
         try {
             manager = new MysqlDatabaseManager();
-            manager.connectToDataBase("mysqlcmd", "root", "root");
+            Sign sign = new SignReader("mysqlcmd", "root", "root");
+            manager.connectToDataBase(sign);
             manager.clear(tableName);
             manager.insert(tableName, data);
 
             manager = new PostgreSqlDatabaseManager();
-            manager.connectToDataBase("pgsqlcmd", "postgres", "postgres");
+
+            sign = new SignReader("pgsqlcmd", "postgres", "postgres");
+            manager.connectToDataBase(sign);
             tableName = "user";
             manager.clear(tableName);
             manager.insert(tableName, data);

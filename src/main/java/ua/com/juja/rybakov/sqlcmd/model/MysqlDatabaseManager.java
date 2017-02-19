@@ -1,5 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+
 import java.sql.*;
 import java.util.*;
 
@@ -73,7 +75,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void connectToDataBase(String database, String user, String password) {
+    public void connectToDataBase(Sign sign) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -82,8 +84,8 @@ public class MysqlDatabaseManager implements DatabaseManager {
         try {
             String url = "jdbc:mysql://" + configuration.getMysqlServer() + ":"
                     + configuration.getMysqlPort() + "/"
-                    + database + "?useSSL=" + configuration.getMysqlUseSsl();
-            connection = DriverManager.getConnection(url, user, password);
+                    + sign.getDatabaseName() + "?useSSL=" + configuration.getMysqlUseSsl();
+            connection = DriverManager.getConnection(url, sign.getUserName(), sign.getUserPassword());
         } catch (SQLException e1) {
             try {
                 Class.forName("org.postgresql.Driver");
@@ -91,11 +93,11 @@ public class MysqlDatabaseManager implements DatabaseManager {
                 throw new RuntimeException("Please register you JDBC driver", e);
             }
             try {
-                String url = "jdbc:postgresql://" + configuration.getPostgreSqlServer() + "/" + database;
-                connection = DriverManager.getConnection(url, user, password);
+                String url = "jdbc:postgresql://" + configuration.getPostgreSqlServer() + "/" + sign.getDatabaseName();
+                connection = DriverManager.getConnection(url, sign.getUserName(), sign.getUserPassword());
             } catch (SQLException e) {
                 connection = null;
-                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), e);
+                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", sign.getDatabaseName(), sign.getUserName(), sign.getUserPassword()), e);
             }
         }
     }

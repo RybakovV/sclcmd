@@ -3,34 +3,13 @@ package ua.com.juja.rybakov.sqlcmd.controller;
 import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 /**
- * Created by Vitaliy Ryvakov on 15.02.2017.
+ * Created by Vitaliy Ryvakov on 19.02.2017.
  */
-public class Sign {
-    private String databaseName;
-    private String userName;
-    private String userPassword;
+public interface Sign {
+    String getDatabaseName();
 
-    public String getDatabaseName() {
-        return databaseName;
-    }
+    String getUserName();
 
-    public String getUserName() {
-        return userName;
-    }
+    String getUserPassword();
 
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public Sign invoke(View view) {
-        view.write("Enter Database name: ");
-        databaseName = view.read();
-
-        view.write("Enter userName");
-        userName = view.read();
-
-        view.write("Enter password");
-        userPassword = view.read();
-        return this;
-    }
 }

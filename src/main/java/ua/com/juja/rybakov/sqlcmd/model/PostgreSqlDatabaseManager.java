@@ -1,5 +1,7 @@
 package ua.com.juja.rybakov.sqlcmd.model;
 
+import ua.com.juja.rybakov.sqlcmd.controller.Sign;
+
 import java.sql.*;
 import java.util.*;
 
@@ -67,7 +69,10 @@ public class PostgreSqlDatabaseManager implements DatabaseManager {
     }
 
     @Override
-    public void connectToDataBase(String database, String user, String password) {
+    public void connectToDataBase(Sign sign) {
+        String database =  sign.getDatabaseName();
+        String user = sign.getUserName();
+        String password = sign.getUserPassword();
         try {
             Class.forName("org.postgresql.Driver");
         } catch (ClassNotFoundException e) {
