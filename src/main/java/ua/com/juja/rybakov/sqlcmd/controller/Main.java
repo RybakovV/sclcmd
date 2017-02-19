@@ -13,14 +13,7 @@ public class Main {
     private static Command[] commands;
 
     public static void main(String[] args) {
-
-        view = new Console();
-        manager = new MysqlDatabaseManager();
-        commands = new Command[]{
-                new Help(view),
-                new Exit(view),
-                new IsConnected(view, manager)};
-        view.write("Hello");
+        init();
 
         try {
             while (true) {
@@ -31,23 +24,37 @@ public class Main {
                     continue;
                 }
                 //commands = initializeCommands();
-                for (Command command : commands) {
-                    try {
-                        if (command.canProcess(input)) {
-                            command.process(input);
-                            break;
-                        }
-                    } catch (Exception e) {
-                        if (e instanceof ExitException) {
-                            throw e;
-                        }
-                        printError(e);
-                        break;
-                    }
-                }
+                processCommand(input);
             }
         } catch (ExitException e) {
             //do nothing
+        }
+    }
+
+    private static void init() {
+        view = new Console();
+        manager = new MysqlDatabaseManager();
+        commands = new Command[]{
+                new Help(view),
+                new Exit(view),
+                new IsConnected(view, manager)};
+        view.write("Hello");
+    }
+
+    private static void processCommand(String input) {
+        for (Command command : commands) {
+            try {
+                if (command.canProcess(input)) {
+                    command.process(input);
+                    break;
+                }
+            } catch (Exception e) {
+                if (e instanceof ExitException) {
+                    throw e;
+                }
+                printError(e);
+                break;
+            }
         }
     }
 
@@ -76,13 +83,12 @@ public class Main {
         manager.connectToDataBase(sign);
         if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
             manager = new PostgreSqlDatabaseManager();
-            commands = initializeCommands();
-            manager.connectToDataBase(sign);
         } else {
             manager = new MysqlDatabaseManager();
-            commands = initializeCommands();
-            manager.connectToDataBase(sign);
         }
+        commands = initializeCommands();
+        manager.connectToDataBase(sign);
+
     }
 
     private static void procesErrore(int countTry, Exception e) {

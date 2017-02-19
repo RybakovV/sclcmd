@@ -7,6 +7,8 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.Set;
 
+import static ua.com.juja.rybakov.sqlcmd.controller.command.ParseCommand.parseCommand;
+
 public class Insert implements Command {
     private DatabaseManager manager;
     private View view;
@@ -40,13 +42,5 @@ public class Insert implements Command {
         } else {
             throw new IllegalArgumentException("Table '" + tableName + "' doesn't exist");
         }
-    }
-
-    private String[] parseCommand(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
-        return command;
     }
 }

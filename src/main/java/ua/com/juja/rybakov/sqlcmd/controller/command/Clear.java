@@ -5,6 +5,8 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.sql.SQLException; //TODO Потрібно віддати клієнту
 
+import static ua.com.juja.rybakov.sqlcmd.controller.command.ParseCommand.parseCommand;
+
 public class Clear implements Command {
     private View view;
     private DatabaseManager manager;
@@ -58,11 +60,4 @@ public class Clear implements Command {
         }
     }
 
-    private String[] parseCommand(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
-        return command;
-    }
 }

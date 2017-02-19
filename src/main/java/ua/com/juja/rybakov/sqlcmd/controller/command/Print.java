@@ -6,6 +6,8 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.List;
 
+import static ua.com.juja.rybakov.sqlcmd.controller.command.ParseCommand.parseCommand;
+
 public class Print implements Command {
 
     private View view;
@@ -28,14 +30,6 @@ public class Print implements Command {
         tableName = command[1];
         List<DataSet> data = manager.getTableData(tableName);
         view.write(getTableString(data));
-    }
-
-    private String[] parseCommand(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
-        return command;
     }
 
     private String getTableString(List<DataSet> data) {

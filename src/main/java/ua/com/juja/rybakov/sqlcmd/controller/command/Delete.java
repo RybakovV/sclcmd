@@ -7,6 +7,8 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.Set;
 
+import static ua.com.juja.rybakov.sqlcmd.controller.command.ParseCommand.parseCommand;
+
 public class Delete implements Command {
     private DatabaseManager manager;
     private View view;
@@ -23,7 +25,7 @@ public class Delete implements Command {
 
     @Override
     public void process(String input) {
-        String[] command = parse(input);
+        String[] command = parseCommand(input);
         String tableName = command[1];
         Set<String> columnName = manager.getColumnNames(tableName);
 
@@ -41,11 +43,4 @@ public class Delete implements Command {
         }
     }
 
-    private String[] parse(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
-        return command;
-    }
 }
