@@ -6,8 +6,8 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 import java.sql.SQLException; //TODO Потрібно віддати клієнту
 
 public class Clear implements Command {
-    private final View view;
-    private final DatabaseManager manager;
+    private View view;
+    private DatabaseManager manager;
 
     public Clear(View view, DatabaseManager manager) {
         this.view = view;
@@ -22,36 +22,47 @@ public class Clear implements Command {
 
     @Override
     public void process(String input) {
-        String[] command = input.split(" ");
-        if (command.length != 2) {
-            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
-        }
+        String[] command = parseCommand(input);
         String tableName = command[1];
         String message = "The table '" + tableName + "' is cleared.";
         try {
             view.write("All data will be deleted from the table. Do you really want to do it? (Y/N):");
             String answer = view.read();
-            int attemtsCount = 0;
-            while (attemtsCount < 3) {
-                if (answer.equals("y") | answer.equals("Y")) {
-                    manager.clear(tableName);
-                    break;
-                }
-                if (answer.equals("n") | answer.equals("N")) {
-                    message = "The table is not cleared";
-                    break;
-                }
-
-                view.write("Enter Y (if yes) or N (if no):");
-                answer = view.read();
-                attemtsCount++;
-            }
-            if (attemtsCount == 3) {
-                throw new SQLException("too many attempts");
-            }
+            confirmClear(answer, tableName);
         } catch (SQLException e) {
             message = "The table '" + tableName + "' is not cleared. Because: " + e.getMessage();
         }
         view.write(message);
+    }
+
+    private void confirmClear(String answer, String tableName) throws SQLException {
+        int attemptsCount = 0;
+        while (attemptsCount < 3) {
+            attemptsCount++;
+
+            if (answer.equals("y") | answer.equals("Y")) {
+                manager.clear(tableName);
+                break;
+            }
+
+            if (answer.equals("n") | answer.equals("N")) {
+                view.write("The table is not cleared");
+                break;
+            }
+
+            view.write("Enter Y (if yes) or N (if no):");
+            answer = view.read();
+        }
+        if (attemptsCount == 3) {
+            throw new SQLException("too many attempts");
+        }
+    }
+
+    private String[] parseCommand(String input) {
+        String[] command = input.split(" ");
+        if (command.length != 2) {
+            throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));
+        }
+        return command;
     }
 }

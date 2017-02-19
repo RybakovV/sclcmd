@@ -7,42 +7,41 @@ import ua.com.juja.rybakov.sqlcmd.viuw.View;
 
 import java.util.Set;
 
-public class Insert implements Command {
+public class Delete implements Command {
     private DatabaseManager manager;
     private View view;
 
-    public Insert(View view, DatabaseManager manager) {
+    public Delete(View view, DatabaseManager manager) {
         this.view = view;
         this.manager = manager;
     }
 
     @Override
     public boolean canProcess(String command) {
-        return command.startsWith("insert");
+        return command.startsWith("delete");
     }
 
     @Override
     public void process(String input) {
-        String[] command = parseCommand(input);
+        String[] command = parse(input);
         String tableName = command[1];
         Set<String> columnName = manager.getColumnNames(tableName);
 
         if (columnName.size() > 0) {
-            view.write("Enter the data when you want to insert.");
-            DataSet insertData = new DataSetImpl();
+            view.write("Enter the data when you want to delete.");
+            DataSet deleteData = new DataSetImpl();
             for (String name : columnName) {
                 view.write("Input " + name + ":");
                 Object value = view.read();
-                insertData.put(name, value);
+                deleteData.put(name, value);
             }
-            manager.insert(tableName, insertData);
-            view.write("Data inserting successfully.");
+            manager.delete(tableName, deleteData);
         } else {
             throw new IllegalArgumentException("Table '" + tableName + "' doesn't exist");
         }
     }
 
-    private String[] parseCommand(String input) {
+    private String[] parse(String input) {
         String[] command = input.split(" ");
         if (command.length != 2) {
             throw new IllegalArgumentException("incorrect number of parameters. Expected 1, but is " + (command.length - 1));

@@ -337,7 +337,7 @@ public class IntegrationTest {
                 "Command failed. Because:  Incorrect integer value: 'qwe' for column 'id' at row 1\n" +
                 "Try again\n" +
                 "Enter command (or command 'help' for help): \n" +
-                //inser user
+                //insert user
                 "Enter the data when you want to insert.\n" +
                 "Input id:\n" +
                 //19
@@ -345,6 +345,7 @@ public class IntegrationTest {
                 //MYSQL
                 "Input password:\n" +
                 //PASSWORD
+                "Data inserting successfully.\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print user
                 "╔══════════╦══════════╦══════════╗\n" +
@@ -373,7 +374,7 @@ public class IntegrationTest {
                 "Command failed. Because: Table 'users' doesn't exist\n" +
                 "Try again\n" +
                 "Enter command (or command 'help' for help): \n" +
-                //inser user
+                //insert user
                 "Enter the data when you want to insert.\n" +
                 "Input id:\n" +
                 //qwe
@@ -385,7 +386,7 @@ public class IntegrationTest {
                 "  Позиция: 53\n" +
                 "Try again\n" +
                 "Enter command (or command 'help' for help): \n" +
-                //inser user
+                //insert user
                 "Enter the data when you want to insert.\n" +
                 "Input id:\n" +
                 //22
@@ -393,6 +394,7 @@ public class IntegrationTest {
                 //POSTGRES
                 "Input password:\n" +
                 //PASSWORD
+                "Data inserting successfully.\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print user
                 "╔══════════╦══════════╦══════════╗\n" +
@@ -693,6 +695,8 @@ public class IntegrationTest {
                 "\t\tinsert data to the table 'tableName'\n" +
                 "\tupdate tableName\n" +
                 "\t\tupdate data of the table 'tableName'\n" +
+                "\tdelete tableName\n" +
+                "\t\tdelete data from the table 'tableName'\n" +
                 "\tclear tableName\n" +
                 "\t\tclear data of the table 'tableName'\n" +
                 "\texit\n" +
@@ -754,6 +758,7 @@ public class IntegrationTest {
                 //MYSQL
                 "Input password:\n" +
                 //PASSWORD
+                "Data inserting successfully.\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print user
                 "╔══════════╦══════════╦══════════╗\n" +
@@ -843,6 +848,7 @@ public class IntegrationTest {
                 //POSTGRES
                 "Input password:\n" +
                 //PASSWORD
+                "Data inserting successfully.\n" +
                 "Enter command (or command 'help' for help): \n" +
                 //print user
                 "╔══════════╦══════════╦══════════╗\n" +

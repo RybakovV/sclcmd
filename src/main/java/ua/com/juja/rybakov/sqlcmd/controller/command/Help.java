@@ -36,6 +36,9 @@ public class Help implements Command {
         view.write("\tupdate tableName");
         view.write("\t\tupdate data of the table 'tableName'");
 
+        view.write("\tdelete tableName");
+        view.write("\t\tdelete data from the table 'tableName'");
+
         view.write("\tclear tableName");
         view.write("\t\tclear data of the table 'tableName'");
 

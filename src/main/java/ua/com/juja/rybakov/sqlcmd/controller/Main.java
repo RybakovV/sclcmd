@@ -52,10 +52,7 @@ public class Main {
     }
 
     private static void printError(Exception e) {
-        String message = e.getMessage();
-        if (e.getCause() != null) {
-            message += " " + e.getCause().getMessage();
-        }
+        String message = buildMessage(e);
         view.write("Command failed. Because: " + message);
         view.write("Try again");
     }
@@ -64,63 +61,67 @@ public class Main {
         int countTry = 0;
         while (countTry < 3) {
             countTry++;
-            view.write("Enter Database name: ");
-            String databaseName = view.read();
-            view.write("Enter userName");
-            String userName = view.read();
-            view.write("Enter password");
-            String userPassword = view.read();
+            Sign sign = new Sign().invoke(view);
+            String databaseName = sign.getDatabaseName();
+            String userName = sign.getUserName();
+            String userPassword = sign.getUserPassword();
+
             try {
-                manager.connectToDataBase(databaseName, userName, userPassword);
-                if (manager.getVersionDatabase().equals("MySQL")) {
-                    manager = new MysqlDatabaseManager();
-                    commands = initializeCommands();
-                    manager.connectToDataBase(databaseName, userName, userPassword);
-                } else if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
-                    manager = new PostgreSqlDatabaseManager();
-                    commands = initializeCommands();
-                    manager.connectToDataBase(databaseName, userName, userPassword);
-                } else {
-                    //TODO Костиль, если не удалось опрееделить
-                    //TODO тип БД, то считаем, что это MySQL
-                    manager = new MysqlDatabaseManager();
-                    commands = initializeCommands();
-                    manager.connectToDataBase(databaseName, userName, userPassword);
-                }
+                connect(databaseName, userName, userPassword);
                 view.write("You connected to " + manager.getVersionDatabase() + " database");
                 break;
             } catch (Exception e) {
-                String message = e.getMessage();
-                if (e.getCause() != null) {
-                    message += " " + e.getCause().getMessage();
-                }
-                view.write("You can't connect to the database. Because: " + message);
-                if (countTry < 3) {
-                    view.write("Try again");
-                } else {
-                    view.write("Enough try");
-                }
+                procesErrore(countTry, e);
             }
         }
+    }
+
+    private static void connect(String databaseName, String userName, String userPassword) {
+        manager.connectToDataBase(databaseName, userName, userPassword);
+        if (manager.getVersionDatabase().equals(("PostgreSQL"))) {
+            manager = new PostgreSqlDatabaseManager();
+            commands = initializeCommands();
+            manager.connectToDataBase(databaseName, userName, userPassword);
+        } else {
+            manager = new MysqlDatabaseManager();
+            commands = initializeCommands();
+            manager.connectToDataBase(databaseName, userName, userPassword);
+        }
+    }
+
+    private static void procesErrore(int countTry, Exception e) {
+        String message = buildMessage(e);
+        checkTry(countTry, message);
+    }
+
+    private static void checkTry(int countTry, String message) {
+        view.write("You can't connect to the database. Because: " + message);
+        if (countTry < 3) {
+            view.write("Try again");
+        } else {
+            view.write("Enough try");
+        }
+    }
+
+    private static String buildMessage(Exception e) {
+        String result = e.getMessage();
+        if (e.getCause() != null) {
+            result += " " + e.getCause().getMessage();
+        }
+        return result;
     }
 
     private static Command[] initializeCommands() {
         return new Command[]{
                 new Help(view),
                 new Exit(view),
-                //new Connect(view, manager), //TODO реализовать комаду connect, как другие комнады
-//TODO          // на даный момент команда реализована в Main - классе. Я понимаю, что єто плохо но не
-//TODO          // могу додуматься, как реализовать по другому. Точнее реализовать знаю, как, но как реализовать,
-//TODO          // так, чтобы заработало, не знаю. Проблема в том, что в Main я определяю
-//TODO          // менеджера БД (mySQL или PostgreQL) manager = new MysqlDatabaseManager();
-//TODO          // в методе doConnect я переопределю при необходимости менеджера manager = new PostgreSqlDatabaseManager();
-//TODO          // но из внешенего класса, я не могу этого сделать
-
+                //new Connect(view, manager),
                 new ListDatabase(view, manager),
                 new ListTables(view, manager),
                 new Print(view, manager),
                 new Edit(view, manager),
                 new Insert(view, manager),
+                new Delete(view, manager),
                 new Clear(view, manager),
                 new NonExisten(view)};
     }

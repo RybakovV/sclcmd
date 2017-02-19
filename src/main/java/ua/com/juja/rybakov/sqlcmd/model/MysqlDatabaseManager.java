@@ -10,7 +10,6 @@ public class MysqlDatabaseManager implements DatabaseManager {
     private String userName;
     private String userPassword;
 
-
     @Override
     public List<DataSet> getTableData(String tableName) {
         int tableSize = getCountRows(tableName);
@@ -18,18 +17,7 @@ public class MysqlDatabaseManager implements DatabaseManager {
         if (tableSize > 0) {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM " + tableName)) {
-                ResultSetMetaData resultSetMetaData;
-                if (resultSet != null) {
-                    resultSetMetaData = resultSet.getMetaData();
-                    int columnCount = getColumnCount(tableName);
-                    while (resultSet.next()) {
-                        DataSet dataSet = new DataSetImpl();
-                        for (int i = 1; i <= columnCount; i++) {
-                            dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
-                        }
-                        result.add(dataSet);
-                    }
-                }
+                result = getDataSetList(tableName, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -37,6 +25,22 @@ public class MysqlDatabaseManager implements DatabaseManager {
         return result;
     }
 
+    private List<DataSet> getDataSetList(String tableName, ResultSet resultSet) throws SQLException {
+        List<DataSet> result = new LinkedList<>();
+        ResultSetMetaData resultSetMetaData;
+        if (resultSet != null) {
+            resultSetMetaData = resultSet.getMetaData();
+            int columnCount = getColumnCount(tableName);
+            while (resultSet.next()) {
+                DataSet dataSet = new DataSetImpl();
+                for (int i = 1; i <= columnCount; i++) {
+                    dataSet.put(resultSetMetaData.getColumnName(i), resultSet.getObject(i));
+                }
+                result.add(dataSet);
+            }
+        }
+        return result;
+    }
 
     private int getCountRows(String tableName) {
         int countRows = 0;
@@ -159,6 +163,19 @@ public class MysqlDatabaseManager implements DatabaseManager {
             String columnNames = data.getColumnNames().toString();
             columnNames = columnNames.substring(1, columnNames.length() - 1);
             String sql = "INSERT INTO " + tableName + " (" + columnNames + ") VALUES (" + valueSet + ")";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException("", e);
+        }
+    }
+
+    @Override
+    public void delete(String tableName, DataSet data) {
+        try (Statement statement = connection.createStatement()) {
+            String valueSet = data.getValuesString();
+            String columnNames = data.getColumnNames().toString();
+            columnNames = columnNames.substring(1, columnNames.length() - 1);
+            String sql = "DELETE FROM " + tableName + "WHERE (" + columnNames + ") = (" + valueSet + ")";
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException("", e);

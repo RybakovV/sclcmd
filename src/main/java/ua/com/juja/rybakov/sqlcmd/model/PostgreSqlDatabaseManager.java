@@ -18,18 +18,24 @@ public class PostgreSqlDatabaseManager implements DatabaseManager {
         if (tableSize > 0) {
             try (Statement statement = connection.createStatement();
                  ResultSet resultSet = statement.executeQuery("SELECT * FROM public." + tableName)) {
-                ResultSetMetaData metaData = resultSet.getMetaData();
-                int columnCount = getColumnCount(tableName);
-                while (resultSet.next()) {
-                    DataSet dataSet = new DataSetImpl();
-                    for (int i = 1; i <= columnCount; i++) {
-                        dataSet.put(metaData.getColumnName(i), resultSet.getObject(i));
-                    }
-                    result.add(dataSet);
-                }
+                result = getDataSetList(tableName, resultSet);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+        return result;
+    }
+
+    private List<DataSet> getDataSetList(String tableName, ResultSet resultSet) throws SQLException {
+        List<DataSet> result = new LinkedList<>();
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        int columnCount = getColumnCount(tableName);
+        while (resultSet.next()) {
+            DataSet dataSet = new DataSetImpl();
+            for (int i = 1; i <= columnCount; i++) {
+                dataSet.put(metaData.getColumnName(i), resultSet.getObject(i));
+            }
+            result.add(dataSet);
         }
         return result;
     }
@@ -86,7 +92,8 @@ public class PostgreSqlDatabaseManager implements DatabaseManager {
 
             } catch (SQLException e) {
                 connection = null;
-                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ", database, user, password), e);
+                throw new RuntimeException(String.format("Can't connect to Database: %s by User: %s or Password: %s. ",
+                        database, user, password), e);
             }
         }
     }
@@ -144,6 +151,19 @@ public class PostgreSqlDatabaseManager implements DatabaseManager {
             String columnNames = data.getColumnNames().toString();
             columnNames = columnNames.substring(1, columnNames.length() - 1);
             String sql = "INSERT INTO public." + tableName + "(" + columnNames + ") VALUES (" + valueSet + ")";
+            statement.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new RuntimeException("", e);
+        }
+    }
+
+    @Override
+    public void delete(String tableName, DataSet data) {
+        try (Statement statement = connection.createStatement()) {
+            String valueSet = data.getValuesString();
+            String columnNames = data.getColumnNames().toString();
+            columnNames = columnNames.substring(1, columnNames.length() - 1);
+            String sql = "DELETE FROM public." + tableName + "WHERE (" + columnNames + ") = (" + valueSet + ")";
             statement.executeUpdate(sql);
         } catch (SQLException e) {
             throw new RuntimeException("", e);

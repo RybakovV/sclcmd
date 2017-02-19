@@ -20,6 +20,8 @@ public interface DatabaseManager {
 
     void insert(String tableName, DataSet data);
 
+    void delete(String tableName, DataSet data);
+
     void clear(String tableName) throws SQLException;
 
     String getDatabaseName();

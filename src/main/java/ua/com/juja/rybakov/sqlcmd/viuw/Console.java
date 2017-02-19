@@ -12,7 +12,6 @@ public class Console implements View {
     @Override
     public void write(String massage) {
         System.out.println(massage);
-
     }
 
     @Override
@@ -20,9 +19,9 @@ public class Console implements View {
         try {
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
-
         } catch (NoSuchElementException e) {
-            return null;
+            e.printStackTrace();
+            return "";
         }
     }
 }
