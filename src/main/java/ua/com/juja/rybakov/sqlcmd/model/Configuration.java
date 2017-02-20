@@ -16,7 +16,10 @@ public class Configuration {
     private Properties properties;
 
     public Configuration() {
-        File file = new File(CONFIGURATION_FILE);
+        loadProperties(new File(CONFIGURATION_FILE));
+    }
+
+    private void loadProperties(File file) {
         properties = new Properties();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             properties.load(fileInputStream);
