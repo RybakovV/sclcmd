@@ -28,20 +28,24 @@ public class Edit implements Command {
     public void process(String input) {
         String[] command = parseCommand(input);
         String tableName = command[1];
-        Set<String> columnName = manager.getColumnNames(tableName);
 
+        Set<String> columnName = manager.getColumnNames(tableName);
         if (columnName.size() > 0) {
             view.write("Enter 'id' row when you want to change (edit): ");
-            DataSet insertData = new DataSetImpl();
             int dataChange = Integer.parseInt(view.read());
-            for (String name : columnName) {
-                view.write("Input new " + name + ":");
-                Object value = view.read();
-                insertData.put(name, value);
-            }
-            manager.update(tableName, dataChange, insertData);
+            manager.update(tableName, dataChange, inputData(columnName));
         } else {
             throw new IllegalArgumentException("Table '" + tableName + "' doesn't exist");
         }
+    }
+
+    private DataSet inputData(Set<String> columnName) {
+        DataSet insertData = new DataSetImpl();
+        for (String name : columnName) {
+            view.write("Input new " + name + ":");
+            Object value = view.read();
+            insertData.put(name, value);
+        }
+        return insertData;
     }
 }
